@@ -34,6 +34,21 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Toolkit, Version=5.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Toolkit.5.1.1\lib\netstandard2.0\Microsoft.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Toolkit.Parsers, Version=5.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Toolkit.Parsers.5.1.1\lib\netstandard2.0\Microsoft.Toolkit.Parsers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="md2docx.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
