@@ -4,7 +4,6 @@ using Microsoft.Toolkit.Parsers.Markdown.Blocks;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
 using A = DocumentFormat.OpenXml.Drawing;
 using Thm15 = DocumentFormat.OpenXml.Office2013.Theme;
@@ -174,7 +173,30 @@ namespace md2docx
                 if (element is ParagraphBlock mpara)
                 {
                     Paragraph dpara = new Paragraph();
+                    ParagraphProperties dparap = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId() { Val = "BodyText" }
+                    };
+                    dpara.ParagraphProperties = dparap;
                     foreach (var inline in mpara.Inlines)
+                    {
+                        dfs(new RunProperties(), inline, ref dpara);
+                    }
+                    body1.Append(dpara);
+                }else if (element is HeaderBlock mhead)
+                {
+                    Paragraph dpara = new Paragraph();
+                    ParagraphProperties dparap = new ParagraphProperties();
+                    switch (mhead.HeaderLevel)
+                    {
+                        case int i when i < 4:
+                            dparap.ParagraphStyleId = new ParagraphStyleId() { Val = $"Heading{i}" };
+                            break;
+                        default:
+                            throw new Exception($"Rendering {element.GetType()} not implement yet");
+                    }
+                    dpara.ParagraphProperties = dparap;
+                    foreach(var inline in mhead.Inlines)
                     {
                         dfs(new RunProperties(), inline, ref dpara);
                     }
@@ -214,7 +236,8 @@ namespace md2docx
                     Run trun = new Run();
                     Text dtext = new Text
                     {
-                        Text = mtxt.Text
+                        Text = mtxt.Text,
+                        Space = SpaceProcessingModeValues.Preserve 
                     };
                     trun.Append(newtrp);
                     trun.Append(dtext);
@@ -1853,6 +1876,7 @@ namespace md2docx
             SpacingBetweenLines spacingBetweenLines2 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 };
             Justification justification1 = new Justification() { Val = JustificationValues.Center };
             OutlineLevel outlineLevel1 = new OutlineLevel() { Val = 0 };
+            Indentation indentation1 = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             styleParagraphProperties1.Append(keepNext1);
             styleParagraphProperties1.Append(keepLines1);
@@ -1862,7 +1886,7 @@ namespace md2docx
             styleParagraphProperties1.Append(outlineLevel1);
 
             StyleRunProperties styleRunProperties2 = new StyleRunProperties();
-            RunFonts runFonts3 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
+            RunFonts runFonts3 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScript = "Times New Roman" };
             BoldComplexScript boldComplexScript1 = new BoldComplexScript();
             Color color2 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
             FontSize fontSize2 = new FontSize() { Val = "32" };
@@ -1901,14 +1925,17 @@ namespace md2docx
             styleParagraphProperties2.Append(keepLines2);
             styleParagraphProperties2.Append(spacingBetweenLines3);
             styleParagraphProperties2.Append(outlineLevel2);
+            styleParagraphProperties2.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             StyleRunProperties styleRunProperties3 = new StyleRunProperties();
-            RunFonts runFonts4 = new RunFonts() { EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
+            RunFonts runFonts4 = new RunFonts() { EastAsia = "黑体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" };
             BoldComplexScript boldComplexScript2 = new BoldComplexScript();
-            FontSizeComplexScript fontSizeComplexScript3 = new FontSizeComplexScript() { Val = "32" };
+            FontSize fontSize3 = new FontSize() { Val = "24" };
+            FontSizeComplexScript fontSizeComplexScript3 = new FontSizeComplexScript() { Val = "24" };
 
             styleRunProperties3.Append(runFonts4);
             styleRunProperties3.Append(boldComplexScript2);
+            styleRunProperties3.Append(fontSize3);
             styleRunProperties3.Append(fontSizeComplexScript3);
 
             style3.Append(styleName3);
@@ -1940,14 +1967,17 @@ namespace md2docx
             styleParagraphProperties3.Append(keepLines3);
             styleParagraphProperties3.Append(spacingBetweenLines4);
             styleParagraphProperties3.Append(outlineLevel3);
+            styleParagraphProperties3.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             StyleRunProperties styleRunProperties4 = new StyleRunProperties();
-            RunFonts runFonts5 = new RunFonts() { EastAsia = "楷体", AsciiTheme = ThemeFontValues.MajorHighAnsi, HighAnsiTheme = ThemeFontValues.MajorHighAnsi, ComplexScriptTheme = ThemeFontValues.MajorBidi };
+            RunFonts runFonts5 = new RunFonts() { EastAsia = "楷体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" };
             BoldComplexScript boldComplexScript3 = new BoldComplexScript();
-            FontSizeComplexScript fontSizeComplexScript4 = new FontSizeComplexScript() { Val = "28" };
+            FontSize fontSize4 = new FontSize() { Val = "24" };
+            FontSizeComplexScript fontSizeComplexScript4 = new FontSizeComplexScript() { Val = "24" };
 
             styleRunProperties4.Append(runFonts5);
             styleRunProperties4.Append(boldComplexScript3);
+            styleRunProperties4.Append(fontSize4);
             styleRunProperties4.Append(fontSizeComplexScript4);
 
             style4.Append(styleName4);
@@ -1968,17 +1998,21 @@ namespace md2docx
 
             StyleParagraphProperties styleParagraphProperties10 = new StyleParagraphProperties();
             SpacingBetweenLines spacingBetweenLines11 = new SpacingBetweenLines() { Before = "180", After = "180" };
-            Indentation indentation1 = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             styleParagraphProperties10.Append(spacingBetweenLines11);
             styleParagraphProperties10.Append(indentation1);
+            styleParagraphProperties10.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             StyleRunProperties styleRunProperties11 = new StyleRunProperties();
             RunFonts runFonts12 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
             Color color9 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
+            FontSize fontSize5 = new FontSize() { Val = "24" };
+            FontSizeComplexScript fontSizeComplexScript5 = new FontSizeComplexScript() { Val = "24" };
 
             styleRunProperties11.Append(runFonts12);
             styleRunProperties11.Append(color9);
+            styleRunProperties11.Append(fontSize5);
+            styleRunProperties11.Append(fontSizeComplexScript5);
 
             style14.Append(styleName14);
             style14.Append(linkedStyle1);
