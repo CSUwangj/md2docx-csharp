@@ -452,7 +452,7 @@ namespace md2docx
 
             SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };
             PageSize pageSize1 = new PageSize() { Width = (UInt32Value)11906U, Height = (UInt32Value)16838U };
-            PageMargin pageMargin1 = new PageMargin() { Top = 1440, Right = (UInt32Value)1800U, Bottom = 1440, Left = (UInt32Value)1800U, Header = (UInt32Value)851U, Footer = (UInt32Value)992U, Gutter = (UInt32Value)0U };
+            PageMargin pageMargin1 = new PageMargin() { Top = 1418, Right = (UInt32Value)1134U, Bottom = 1418, Left = (UInt32Value)1701U, Header = (UInt32Value)851U, Footer = (UInt32Value)992U, Gutter = (UInt32Value)0U };
             Columns columns1 = new Columns() { Space = "425" };
             DocGrid docGrid1 = new DocGrid() { Type = DocGridValues.Lines, LinePitch = 312 };
 
