@@ -19,6 +19,21 @@ namespace md2docx
 {
     class Md2Docx
     {
+
+        static string name = "";
+        static string id = "";
+        static string teacher = "";
+        static string department = "";
+        static string c_title = "";
+        static string e_title = "";
+        static string clas = "";
+        static string c_abs = "";
+        static string e_abs = "";
+        static string c_kew = "";
+        static string e_kew = "";
+        static string endnote = "";
+        static string filename = "";
+
         static void Main(String[] args)
         {
             string md = System.IO.File.ReadAllText("test.md");
@@ -28,12 +43,6 @@ namespace md2docx
             MarkdownDocument mddoc = new MarkdownDocument();
             mddoc.Parse(md);
 
-            string name = "";
-            string id = "";
-            string teacher = "";
-            string department = "";
-            string title = "";
-            string clas = "";
 
             foreach (var element in mddoc.Blocks)
             {
@@ -43,9 +52,26 @@ namespace md2docx
                     id = yaml.Children["id"];
                     teacher = yaml.Children["teacher"];
                     department = yaml.Children["department"];
-                    title = yaml.Children["title"];
+                    filename = yaml.Children["filename"];
                     clas = yaml.Children["class"];
-                    filePath = id + name + title + ".docx";
+                    filePath = id + name + filename + ".docx";
+
+                    if (yaml.Children.ContainsKey("e_abs"))
+                    {
+                        c_abs = yaml.Children["c_abs"];
+                        c_kew = yaml.Children["c_kew"];
+                        c_title = yaml.Children["c_title"];
+                    }
+                    if (yaml.Children.ContainsKey("e_abs"))
+                    {
+                        e_abs = yaml.Children["e_abs"];
+                        e_kew = yaml.Children["e_kew"];
+                        e_title = yaml.Children["e_title"];
+                    }
+                    if (yaml.Children.ContainsKey("end"))
+                    {
+                        endnote = yaml.Children["end"];
+                    }
                     break;
                 }
             }
@@ -70,7 +96,7 @@ namespace md2docx
                 FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId6");
                 GenerateFontTablePart1Content(fontTablePart1);
 
-                SetPackageProperties(document, name, title);
+                SetPackageProperties(document, name, filePath);
             }
         }
         
@@ -168,6 +194,205 @@ namespace md2docx
 
             Body body1 = new Body();
 
+            // code below can be in one function
+            if (c_title != "")
+            {
+                Paragraph para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
+                    }
+                };
+                Run run = new Run { RunProperties = new RunProperties() };
+                Text txt = new Text { Text = c_title, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "摘要", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = c_abs, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run
+                {
+                    RunProperties = new RunProperties
+                    {
+                        Bold = new Bold(),
+                        BoldComplexScript = new BoldComplexScript()
+                    }
+                };
+                txt = new Text { Text = "关键词：", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = c_kew, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+            }
+
+            if (e_title != "")
+            {
+                Paragraph para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
+                    }
+                };
+                Run run = new Run
+                {
+                    RunProperties = new RunProperties
+                    {
+                        Bold = new Bold()
+                    }
+                };
+                Text txt = new Text { Text = e_title, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
+                    }
+                };
+                run = new Run
+                {
+                    RunProperties = new RunProperties
+                    {
+                        Bold = new Bold()
+                    }
+                };
+                txt = new Text { Text = "ABSTRACT", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = e_abs, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run
+                {
+                    RunProperties = new RunProperties
+                    {
+                        Bold = new Bold(),
+                        BoldComplexScript = new BoldComplexScript()
+                    }
+                };
+                txt = new Text { Text = "Key words: ", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = e_kew, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+            }
+
+            //code below can be in one function
             foreach (var element in document.Blocks)
             {
                 if (element is ParagraphBlock mpara)
@@ -206,6 +431,76 @@ namespace md2docx
                 {
                     throw new Exception($"Rendering {element.GetType()} not implement yet");
                 }
+            }
+
+            if (endnote != "")
+            {
+                Paragraph para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                Run run = new Run{ RunProperties = new RunProperties() };
+                run.Append(new Break { Type = BreakValues.Page });
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                Text txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "结束语", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+
+
+                para = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    }
+                };
+                run = new Run { RunProperties = new RunProperties() };
+                txt = new Text { Text = endnote, Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                para.Append(run);
+                body1.Append(para);
+                
             }
 
             SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };
@@ -2021,6 +2316,76 @@ namespace md2docx
             style14.Append(styleParagraphProperties10);
             style14.Append(styleRunProperties11);
 
+            Style style17 = new Style() { Type = StyleValues.Paragraph, StyleId = "Abstract" };
+            StyleName styleName17 = new StyleName() { Val = "Abstract" };
+            NextParagraphStyle nextParagraphStyle11 = new NextParagraphStyle() { Val = "BodyText" };
+            PrimaryStyle primaryStyle14 = new PrimaryStyle();
+            Rsid rsid7 = new Rsid() { Val = "00BE5CD0" };
+
+            StyleParagraphProperties styleParagraphProperties13 = new StyleParagraphProperties();
+            KeepNext keepNext10 = new KeepNext();
+            PageBreakBefore pageBreakBefore2 = new PageBreakBefore();
+            KeepLines keepLines10 = new KeepLines();
+            SpacingBetweenLines spacingBetweenLines13 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 };
+            Justification justification2 = new Justification() { Val = JustificationValues.Center };
+
+            styleParagraphProperties13.Append(keepNext10);
+            styleParagraphProperties13.Append(keepLines10);
+            styleParagraphProperties13.Append(spacingBetweenLines13);
+            styleParagraphProperties13.Append(justification2);
+            styleParagraphProperties13.Append(pageBreakBefore2);
+
+            StyleRunProperties styleRunProperties13 = new StyleRunProperties();
+            RunFonts runFonts13 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
+            Color color10 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
+            FontSize fontSize6 = new FontSize() { Val = "36" };
+            FontSizeComplexScript fontSizeComplexScript6 = new FontSizeComplexScript() { Val = "36" };
+
+            styleRunProperties13.Append(runFonts13);
+            styleRunProperties13.Append(color10);
+            styleRunProperties13.Append(fontSize6);
+            styleRunProperties13.Append(fontSizeComplexScript6);
+
+            style17.Append(styleName17);
+            style17.Append(nextParagraphStyle11);
+            style17.Append(primaryStyle14);
+            style17.Append(rsid7);
+            style17.Append(styleParagraphProperties13);
+            style17.Append(styleRunProperties13);
+
+            Style style18 = new Style() { Type = StyleValues.Paragraph, StyleId = "Abs" };
+            StyleName styleName18 = new StyleName() { Val = "Abs" };
+            NextParagraphStyle nextParagraphStyle12 = new NextParagraphStyle() { Val = "BodyText" };
+            PrimaryStyle primaryStyle15 = new PrimaryStyle();
+            Rsid rsid8 = new Rsid() { Val = "00B5453C" };
+
+            StyleParagraphProperties styleParagraphProperties14 = new StyleParagraphProperties();
+            SpacingBetweenLines spacingBetweenLines14 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100, Line = "360", LineRule = LineSpacingRuleValues.Auto };
+            Justification justification3 = new Justification() { Val = JustificationValues.Center };
+
+            styleParagraphProperties14.Append(spacingBetweenLines14);
+            styleParagraphProperties14.Append(justification3);
+
+            StyleRunProperties styleRunProperties14 = new StyleRunProperties();
+            RunFonts runFonts14 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
+            BoldComplexScript boldComplexScript6 = new BoldComplexScript();
+            Color color11 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
+            FontSize fontSize7 = new FontSize() { Val = "32" };
+            FontSizeComplexScript fontSizeComplexScript7 = new FontSizeComplexScript() { Val = "30" };
+
+            styleRunProperties14.Append(runFonts14);
+            styleRunProperties14.Append(boldComplexScript6);
+            styleRunProperties14.Append(color11);
+            styleRunProperties14.Append(fontSize7);
+            styleRunProperties14.Append(fontSizeComplexScript7);
+
+            style18.Append(styleName18);
+            style18.Append(nextParagraphStyle12);
+            style18.Append(primaryStyle15);
+            style18.Append(rsid8);
+            style18.Append(styleParagraphProperties14);
+            style18.Append(styleRunProperties14);
+
             Style style34 = new Style() { Type = StyleValues.Character, StyleId = "VerbatimChar", CustomStyle = true };
             StyleName styleName34 = new StyleName() { Val = "Verbatim Char" };
             BasedOn basedOn23 = new BasedOn() { Val = "ad" };
@@ -2058,6 +2423,8 @@ namespace md2docx
             styles1.Append(style3);
             styles1.Append(style4);
             styles1.Append(style14);
+            styles1.Append(style17);
+            styles1.Append(style18);
             styles1.Append(style34);
             styles1.Append(style44);
             
