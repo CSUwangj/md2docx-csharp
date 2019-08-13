@@ -96,7 +96,7 @@ namespace md2docx
                 FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId6");
                 GenerateFontTablePart1Content(fontTablePart1);
 
-                SetPackageProperties(document, name, filePath);
+                SetPackageProperties(document, name, filename);
             }
         }
         
@@ -210,18 +210,6 @@ namespace md2docx
                 para.Append(run);
                 body1.Append(para);
 
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
 
                 para = new Paragraph
                 {
@@ -312,19 +300,6 @@ namespace md2docx
                 {
                     ParagraphProperties = new ParagraphProperties
                     {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
                         ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
                     }
                 };
@@ -339,20 +314,7 @@ namespace md2docx
                 run.Append(txt);
                 para.Append(run);
                 body1.Append(para);
-
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
+                
 
                 para = new Paragraph
                 {
@@ -459,8 +421,7 @@ namespace md2docx
                 run.Append(txt);
                 para.Append(run);
                 body1.Append(para);
-
-
+                
                 para = new Paragraph
                 {
                     ParagraphProperties = new ParagraphProperties
@@ -473,20 +434,6 @@ namespace md2docx
                 run.Append(txt);
                 para.Append(run);
                 body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
 
                 para = new Paragraph
                 {
@@ -2255,7 +2202,7 @@ namespace md2docx
             StyleParagraphProperties styleParagraphProperties3 = new StyleParagraphProperties();
             KeepNext keepNext3 = new KeepNext();
             KeepLines keepLines3 = new KeepLines();
-            SpacingBetweenLines spacingBetweenLines4 = new SpacingBetweenLines() { Before = "200", After = "0" };
+            SpacingBetweenLines spacingBetweenLines4 = new SpacingBetweenLines() { Before = "200", After = "0"};
             OutlineLevel outlineLevel3 = new OutlineLevel() { Val = 2 };
 
             styleParagraphProperties3.Append(keepNext3);
@@ -2292,7 +2239,7 @@ namespace md2docx
             Rsid rsid5 = new Rsid() { Val = "00D9265A" };
 
             StyleParagraphProperties styleParagraphProperties10 = new StyleParagraphProperties();
-            SpacingBetweenLines spacingBetweenLines11 = new SpacingBetweenLines() { Before = "180", After = "180" };
+            SpacingBetweenLines spacingBetweenLines11 = new SpacingBetweenLines() { Before = "180", After = "180", Line = "360", LineRule = LineSpacingRuleValues.Auto };
 
             styleParagraphProperties10.Append(spacingBetweenLines11);
             styleParagraphProperties10.Append(indentation1);
