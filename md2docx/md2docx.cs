@@ -34,7 +34,7 @@ namespace md2docx
         static string endnote = "";
         static string filename = "";
 
-        static void Main(String[] args)
+        private static void Main(string[] args)
         {
             string md = System.IO.File.ReadAllText("test.md");
             string filePath = ("test.docx");
@@ -99,9 +99,9 @@ namespace md2docx
                 SetPackageProperties(document, name, filename);
             }
         }
-        
+
         // Generates content of extendedFilePropertiesPart1.
-        static void GenerateExtendedFilePropertiesPart1Content(ExtendedFilePropertiesPart extendedFilePropertiesPart1)
+        private static void GenerateExtendedFilePropertiesPart1Content(ExtendedFilePropertiesPart extendedFilePropertiesPart1)
         {
             Ap.Properties properties1 = new Ap.Properties();
             properties1.AddNamespaceDeclaration("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes");
@@ -159,7 +159,7 @@ namespace md2docx
         }
 
         // Generates content of mainDocumentPart1.
-        static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document)
+        private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document)
         {
             Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid wp14" } };
             document1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
@@ -197,197 +197,47 @@ namespace md2docx
             // code below can be in one function
             if (c_title != "")
             {
-                Paragraph para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
-                    }
-                };
-                Run run = new Run { RunProperties = new RunProperties() };
-                Text txt = new Text { Text = c_title, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "摘要", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = c_abs, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run
-                {
-                    RunProperties = new RunProperties
-                    {
-                        Bold = new Bold(),
-                        BoldComplexScript = new BoldComplexScript()
-                    }
-                };
-                txt = new Text { Text = "关键词：", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = c_kew, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
+                Add_abstract(c_title, c_abs, c_kew, true, ref body1);
             }
 
             if (e_title != "")
             {
-                Paragraph para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
-                    }
-                };
-                Run run = new Run
-                {
-                    RunProperties = new RunProperties
-                    {
-                        Bold = new Bold()
-                    }
-                };
-                Text txt = new Text { Text = e_title, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
-                    }
-                };
-                run = new Run
-                {
-                    RunProperties = new RunProperties
-                    {
-                        Bold = new Bold()
-                    }
-                };
-                txt = new Text { Text = "ABSTRACT", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-                
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = e_abs, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run
-                {
-                    RunProperties = new RunProperties
-                    {
-                        Bold = new Bold(),
-                        BoldComplexScript = new BoldComplexScript()
-                    }
-                };
-                txt = new Text { Text = "Key words: ", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = e_kew, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
+                Add_abstract(e_title, e_abs, e_kew, false, ref body1);
             }
 
-            //code below can be in one function
+            // rendering body text(paragraph/heading, others are TBD)
             foreach (var element in document.Blocks)
             {
                 if (element is ParagraphBlock mpara)
                 {
-                    Paragraph dpara = new Paragraph();
-                    ParagraphProperties dparap = new ParagraphProperties
+                    Paragraph docPara = new Paragraph
                     {
-                        ParagraphStyleId = new ParagraphStyleId() { Val = "BodyText" }
+                        ParagraphProperties = new ParagraphProperties
+                        {
+                            ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                        }
                     };
-                    dpara.ParagraphProperties = dparap;
                     foreach (var inline in mpara.Inlines)
                     {
-                        dfs(new RunProperties(), inline, ref dpara);
+                        Deal_md_inline(new RunProperties(), inline, ref docPara);
                     }
-                    body1.Append(dpara);
+                    body1.Append(docPara);
                 }else if (element is HeaderBlock mhead)
                 {
-                    Paragraph dpara = new Paragraph();
-                    ParagraphProperties dparap = new ParagraphProperties();
+                    Paragraph docPara = new Paragraph { ParagraphProperties = new ParagraphProperties() };
                     switch (mhead.HeaderLevel)
                     {
                         case int i when i < 4:
-                            dparap.ParagraphStyleId = new ParagraphStyleId() { Val = $"Heading{i}" };
+                            docPara.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = $"Heading{i}" };
                             break;
                         default:
                             throw new Exception($"Rendering {element.GetType()} not implement yet");
                     }
-                    dpara.ParagraphProperties = dparap;
                     foreach(var inline in mhead.Inlines)
                     {
-                        dfs(new RunProperties(), inline, ref dpara);
+                        Deal_md_inline(new RunProperties(), inline, ref docPara);
                     }
-                    body1.Append(dpara);
+                    body1.Append(docPara);
                 }
                 else if(!(element is YamlHeaderBlock))
                 {
@@ -397,57 +247,7 @@ namespace md2docx
 
             if (endnote != "")
             {
-                Paragraph para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                Run run = new Run{ RunProperties = new RunProperties() };
-                run.Append(new Break { Type = BreakValues.Page });
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                Text txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-                
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = "结束语", Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-
-                para = new Paragraph
-                {
-                    ParagraphProperties = new ParagraphProperties
-                    {
-                        ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
-                    }
-                };
-                run = new Run { RunProperties = new RunProperties() };
-                txt = new Text { Text = endnote, Space = SpaceProcessingModeValues.Preserve };
-                run.Append(txt);
-                para.Append(run);
-                body1.Append(para);
-                
+                Add_endnote(endnote, "结束语", ref body1);
             }
 
             SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };
@@ -469,7 +269,7 @@ namespace md2docx
         }
 
         // deal with paragraph with dfs
-        static void dfs(RunProperties rp, MarkdownInline inline, ref Paragraph dpara)
+        private static void Deal_md_inline(RunProperties rp, MarkdownInline inline, ref Paragraph docPara)
         {
             switch (inline)
             {
@@ -483,7 +283,7 @@ namespace md2docx
                     };
                     trun.Append(newtrp);
                     trun.Append(dtext);
-                    dpara.Append(trun);
+                    docPara.Append(trun);
                     break;
                 case CodeInline mcode:
                     RunProperties newcrp = (RunProperties)rp.Clone();
@@ -495,7 +295,7 @@ namespace md2docx
                     };
                     crun.Append(newcrp);
                     crun.Append(dcode);
-                    dpara.Append(crun);
+                    docPara.Append(crun);
                     break;
                 case BoldTextInline bd:
                     RunProperties newbrp = (RunProperties)rp.Clone();
@@ -503,7 +303,7 @@ namespace md2docx
                     newbrp.BoldComplexScript = new BoldComplexScript();
                     foreach(var boldinline in bd.Inlines)
                     {
-                        dfs(newbrp, boldinline, ref dpara);
+                        Deal_md_inline(newbrp, boldinline, ref docPara);
                     }
                     break;
                 case ItalicTextInline it:
@@ -512,7 +312,7 @@ namespace md2docx
                     newirp.ItalicComplexScript = new ItalicComplexScript();
                     foreach(var italicinline in it.Inlines)
                     {
-                        dfs(newirp, italicinline, ref dpara);
+                        Deal_md_inline(newirp, italicinline, ref docPara);
                     }
                     break;
                 case StrikethroughTextInline st:
@@ -520,7 +320,7 @@ namespace md2docx
                     newstrp.Strike = new Strike();
                     foreach(var strinline in st.Inlines)
                     {
-                        dfs(newstrp, strinline, ref dpara);
+                        Deal_md_inline(newstrp, strinline, ref docPara);
                     }
                     break;
                 case SubscriptTextInline sb:
@@ -528,7 +328,7 @@ namespace md2docx
                     newsbrp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Subscript };
                     foreach(var sbinline in sb.Inlines)
                     {
-                        dfs(newsbrp, sbinline, ref dpara);
+                        Deal_md_inline(newsbrp, sbinline, ref docPara);
                     }
                     break;
                 case SuperscriptTextInline sp:
@@ -536,7 +336,7 @@ namespace md2docx
                     newsprp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Superscript };
                     foreach(var spinline in sp.Inlines)
                     {
-                        dfs(newsprp, spinline, ref dpara);
+                        Deal_md_inline(newsprp, spinline, ref docPara);
                     }
                     break;
                 default:
@@ -544,8 +344,128 @@ namespace md2docx
             }
         }
 
+        private static void Add_abstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
+        {
+            string subtitle = isCN ? "摘要" : "ABSTRACT";
+            string keyWT = isCN ? "关键词：" : "Key words ";
+            Paragraph para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
+                }
+            };
+            Run run = new Run { RunProperties = new RunProperties() };
+            if (!isCN)
+            {
+                run.RunProperties.Append(new Bold());
+                run.RunProperties.Append(new BoldComplexScript());
+            }
+            Text txt = new Text { Text = title, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+
+            para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
+                }
+            };
+            run = new Run
+            {
+                RunProperties = (RunProperties)run.RunProperties.Clone()
+            };
+            txt = new Text { Text = subtitle, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                }
+            };
+            run = new Run { RunProperties = new RunProperties() };
+            txt = new Text { Text = abs, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                }
+            };
+            run = new Run { RunProperties = new RunProperties() };
+            txt = new Text { Text = "", Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                }
+            };
+            run = new Run
+            {
+                RunProperties = new RunProperties
+                {
+                    Bold = new Bold(),
+                    BoldComplexScript = new BoldComplexScript()
+                }
+            };
+            txt = new Text { Text = keyWT, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            run = new Run { RunProperties = new RunProperties() };
+            txt = new Text { Text = c_kew, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+        }
+
+        private static void Add_endnote(string endnote, string title, ref Body docBody)
+        {
+            Paragraph para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Abs" },
+                    PageBreakBefore = new PageBreakBefore()
+                }
+            };
+            Run run = new Run { RunProperties = new RunProperties() };
+            Text txt = new Text { Text = title, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                }
+            };
+            run = new Run { RunProperties = new RunProperties() };
+            txt = new Text { Text = endnote, Space = SpaceProcessingModeValues.Preserve };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+        }
+
         // Generates content of webSettingsPart1.
-        static void GenerateWebSettingsPart1Content(WebSettingsPart webSettingsPart1)
+        private static void GenerateWebSettingsPart1Content(WebSettingsPart webSettingsPart1)
         {
             WebSettings webSettings1 = new WebSettings() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
             webSettings1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
@@ -565,7 +485,7 @@ namespace md2docx
         }
 
         // Generates content of themePart1.
-        static void GenerateThemePart1Content(ThemePart themePart1)
+        private static void GenerateThemePart1Content(ThemePart themePart1)
         {
             A.Theme theme1 = new A.Theme() { Name = "Office 主题​​" };
             theme1.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
@@ -1157,7 +1077,7 @@ namespace md2docx
         }
 
         // Generates content of documentSettingsPart1.
-        static void GenerateDocumentSettingsPart1Content(DocumentSettingsPart documentSettingsPart1)
+        private static void GenerateDocumentSettingsPart1Content(DocumentSettingsPart documentSettingsPart1)
         {
             Settings settings1 = new Settings() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
             settings1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
@@ -1302,7 +1222,7 @@ namespace md2docx
         }
 
         // Generates content of styleDefinitionsPart1.
-        static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1)
+        private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1)
         {
             Styles styles1 = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
             styles1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
@@ -2380,7 +2300,7 @@ namespace md2docx
         }
 
         // Generates content of fontTablePart1.
-        static void GenerateFontTablePart1Content(FontTablePart fontTablePart1)
+        private static void GenerateFontTablePart1Content(FontTablePart fontTablePart1)
         {
             Fonts fonts1 = new Fonts() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
             fonts1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
@@ -2455,7 +2375,7 @@ namespace md2docx
             fontTablePart1.Fonts = fonts1;
         }
 
-        static void SetPackageProperties(OpenXmlPackage document, string name, string title)
+        private static void SetPackageProperties(OpenXmlPackage document, string name, string title)
         {
             document.PackageProperties.Creator = name;
             document.PackageProperties.Title = title;
