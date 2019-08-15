@@ -496,71 +496,16 @@ namespace md2docx
             runProperties2.Append(kern2);
             runProperties2.Append(fontSize8);
             runProperties2.Append(fontSizeComplexScript3);
-            Text text1 = new Text();
-            text1.Text = "信息安全综合实践";
+            Text text1 = new Text
+            {
+                Text = filename
+            };
 
             run2.Append(runProperties2);
             run2.Append(text1);
 
             paragraph6.Append(paragraphProperties6);
             paragraph6.Append(run2);
-
-            Paragraph paragraph7 = new Paragraph() { RsidParagraphAddition = "003672AC", RsidParagraphProperties = "003672AC", RsidRunAdditionDefault = "003672AC", ParagraphId = "4E0C5CC1", TextId = "77777777" };
-
-            ParagraphProperties paragraphProperties7 = new ParagraphProperties();
-            Justification justification3 = new Justification() { Val = JustificationValues.Center };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties7 = new ParagraphMarkRunProperties();
-            FontSize fontSize9 = new FontSize() { Val = "24" };
-
-            paragraphMarkRunProperties7.Append(fontSize9);
-
-            paragraphProperties7.Append(justification3);
-            paragraphProperties7.Append(paragraphMarkRunProperties7);
-
-            Run run3 = new Run();
-
-            RunProperties runProperties3 = new RunProperties();
-            RunFonts runFonts4 = new RunFonts() { Hint = FontTypeHintValues.EastAsia, Ascii = "黑体", HighAnsi = "华文楷体", EastAsia = "黑体" };
-            Kern kern3 = new Kern() { Val = (UInt32Value)0U };
-            FontSize fontSize10 = new FontSize() { Val = "90" };
-            FontSizeComplexScript fontSizeComplexScript4 = new FontSizeComplexScript() { Val = "90" };
-
-            runProperties3.Append(runFonts4);
-            runProperties3.Append(kern3);
-            runProperties3.Append(fontSize10);
-            runProperties3.Append(fontSizeComplexScript4);
-            Text text2 = new Text();
-            text2.Text = "总结";
-
-            run3.Append(runProperties3);
-            run3.Append(text2);
-            BookmarkStart bookmarkStart1 = new BookmarkStart() { Name = "_GoBack", Id = "0" };
-            BookmarkEnd bookmarkEnd1 = new BookmarkEnd() { Id = "0" };
-
-            Run run4 = new Run();
-
-            RunProperties runProperties4 = new RunProperties();
-            RunFonts runFonts5 = new RunFonts() { Hint = FontTypeHintValues.EastAsia, Ascii = "黑体", HighAnsi = "华文楷体", EastAsia = "黑体" };
-            Kern kern4 = new Kern() { Val = (UInt32Value)0U };
-            FontSize fontSize11 = new FontSize() { Val = "90" };
-            FontSizeComplexScript fontSizeComplexScript5 = new FontSizeComplexScript() { Val = "90" };
-
-            runProperties4.Append(runFonts5);
-            runProperties4.Append(kern4);
-            runProperties4.Append(fontSize11);
-            runProperties4.Append(fontSizeComplexScript5);
-            Text text3 = new Text();
-            text3.Text = "报告";
-
-            run4.Append(runProperties4);
-            run4.Append(text3);
-
-            paragraph7.Append(paragraphProperties7);
-            paragraph7.Append(run3);
-            paragraph7.Append(bookmarkStart1);
-            paragraph7.Append(bookmarkEnd1);
-            paragraph7.Append(run4);
 
             Paragraph paragraph8 = new Paragraph() { RsidParagraphAddition = "003672AC", RsidParagraphProperties = "003672AC", RsidRunAdditionDefault = "003672AC", ParagraphId = "4B4F29EF", TextId = "77777777" };
 
@@ -1455,8 +1400,10 @@ namespace md2docx
             runProperties20.Append(runFonts32);
             runProperties20.Append(fontSize46);
             runProperties20.Append(fontSizeComplexScript32);
-            Text text19 = new Text();
-            text19.Text = "2019年7月";
+            Text text19 = new Text
+            {
+                Text = DateTime.Now.ToString("yyyy年MM月")
+            };
 
             run20.Append(runProperties20);
             run20.Append(text19);
@@ -1470,7 +1417,6 @@ namespace md2docx
             docBody.Append(paragraph4);
             docBody.Append(paragraph5);
             docBody.Append(paragraph6);
-            docBody.Append(paragraph7);
             docBody.Append(paragraph8);
             docBody.Append(paragraph9);
             docBody.Append(paragraph10);
