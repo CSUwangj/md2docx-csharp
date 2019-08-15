@@ -13,7 +13,6 @@ using M = DocumentFormat.OpenXml.Math;
 using W14 = DocumentFormat.OpenXml.Office2010.Word;
 using W15 = DocumentFormat.OpenXml.Office2013.Word;
 using Microsoft.Toolkit.Parsers.Markdown.Inlines;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 
 namespace md2docx
 {
@@ -72,7 +71,6 @@ namespace md2docx
                     {
                         endnote = yaml.Children["end"];
                     }
-                    break;
                 }
             }
 
@@ -193,8 +191,7 @@ namespace md2docx
             document1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
 
             Body body1 = new Body();
-
-            // code below can be in one function
+            
             if (c_title != "")
             {
                 Add_abstract(c_title, c_abs, c_kew, true, ref body1);
@@ -239,15 +236,34 @@ namespace md2docx
                     }
                     body1.Append(docPara);
                 }
+                else if (element is QuoteBlock refer)
+                {
+                    if (endnote != "")
+                    {
+                        Add_endnote(endnote, "结束语", ref body1);
+                    }
+
+                    Paragraph para = new Paragraph
+                    {
+                        ParagraphProperties = new ParagraphProperties
+                        {
+                            ParagraphStyleId = new ParagraphStyleId { Val = "endtitle" }
+                        }
+                    };
+                    Run run = new Run { RunProperties = new RunProperties() };
+                    Text txt = new Text { Text = "参考文献", Space = SpaceProcessingModeValues.Preserve };
+                    run.Append(txt);
+                    para.Append(run);
+                    body1.Append(para);
+                    foreach (var e in refer.Blocks)
+                    {
+                        Deal_quote_refer(e, ref body1);
+                    }
+                }
                 else if(!(element is YamlHeaderBlock))
                 {
                     throw new Exception($"Rendering {element.GetType()} not implement yet");
                 }
-            }
-
-            if (endnote != "")
-            {
-                Add_endnote(endnote, "结束语", ref body1);
             }
 
             SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };
@@ -340,8 +356,36 @@ namespace md2docx
                     }
                     break;
                 default:
+                    Console.WriteLine(inline.ToString());
                     throw new Exception($"Rendering {inline.GetType()} not implement yet");
             }
+        }
+
+        private static void Deal_quote_refer(MarkdownBlock block, ref Body docBody)
+        {
+            if (!(block is ParagraphBlock))
+            {
+                throw new Exception($"Rendering {block.GetType()} in quote not support");
+            }
+            Paragraph docPara = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "reference" }
+                }
+            };
+            Run run = new Run
+            {
+                RunProperties = new RunProperties()
+            };
+            Text txt = new Text
+            {
+                Text = block.ToString(),
+                Space = SpaceProcessingModeValues.Preserve
+            };
+            run.Append(txt);
+            docPara.Append(run);
+            docBody.Append(docPara);
         }
 
         private static void Add_abstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
@@ -440,8 +484,7 @@ namespace md2docx
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "Abs" },
-                    PageBreakBefore = new PageBreakBefore()
+                    ParagraphStyleId = new ParagraphStyleId { Val = "endtitle" }
                 }
             };
             Run run = new Run { RunProperties = new RunProperties() };
@@ -461,7 +504,7 @@ namespace md2docx
             txt = new Text { Text = endnote, Space = SpaceProcessingModeValues.Preserve };
             run.Append(txt);
             para.Append(run);
-            docBody.Append(para);
+            docBody.Append(para);        
         }
 
         // Generates content of webSettingsPart1.
@@ -2038,7 +2081,6 @@ namespace md2docx
             SpacingBetweenLines spacingBetweenLines2 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 };
             Justification justification1 = new Justification() { Val = JustificationValues.Center };
             OutlineLevel outlineLevel1 = new OutlineLevel() { Val = 0 };
-            Indentation indentation1 = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             styleParagraphProperties1.Append(keepNext1);
             styleParagraphProperties1.Append(keepLines1);
@@ -2160,10 +2202,10 @@ namespace md2docx
 
             StyleParagraphProperties styleParagraphProperties10 = new StyleParagraphProperties();
             SpacingBetweenLines spacingBetweenLines11 = new SpacingBetweenLines() { Before = "180", After = "180", Line = "360", LineRule = LineSpacingRuleValues.Auto };
+            Indentation indentation1 = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             styleParagraphProperties10.Append(spacingBetweenLines11);
             styleParagraphProperties10.Append(indentation1);
-            styleParagraphProperties10.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
 
             StyleRunProperties styleRunProperties11 = new StyleRunProperties();
             RunFonts runFonts12 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
@@ -2253,6 +2295,51 @@ namespace md2docx
             style18.Append(styleParagraphProperties14);
             style18.Append(styleRunProperties14);
 
+            Style style19 = new Style
+            {
+                Type = StyleValues.Paragraph,
+                StyleId = "endtitle",
+                StyleName = new StyleName { Val = "endtitle" },
+                NextParagraphStyle = new NextParagraphStyle { Val = "reference" },
+                PrimaryStyle = new PrimaryStyle(),
+                StyleParagraphProperties = new StyleParagraphProperties
+                {
+                    KeepLines = new KeepLines(),
+                    KeepNext = new KeepNext(),
+                    PageBreakBefore = new PageBreakBefore(),
+                    SpacingBetweenLines = new SpacingBetweenLines { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 },
+                    Justification = new Justification { Val = JustificationValues.Center},
+                    OutlineLevel = new OutlineLevel { Val = 0 },
+                },
+                StyleRunProperties = new StyleRunProperties
+                {
+                    RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi },
+                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
+                    FontSize = new FontSize() { Val = "36" },
+                    FontSizeComplexScript = new FontSizeComplexScript() { Val = "36" },
+                }
+            };
+
+            Style style20 = new Style
+            {
+                Type = StyleValues.Paragraph,
+                StyleId = "reference",
+                StyleName = new StyleName { Val = "reference" },
+                NextParagraphStyle = new NextParagraphStyle { Val = "reference" },
+                PrimaryStyle = new PrimaryStyle(),
+                StyleParagraphProperties = new StyleParagraphProperties
+                {
+                    SpacingBetweenLines = new SpacingBetweenLines { Before = "180", After = "180", Line = "360", LineRule = LineSpacingRuleValues.Auto }
+                },
+                StyleRunProperties = new StyleRunProperties
+                {
+                    RunFonts = new RunFonts { EastAsia = "楷体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" },
+                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
+                    FontSize = new FontSize() { Val = "21" },
+                    FontSizeComplexScript = new FontSizeComplexScript() { Val = "21" },
+                }
+            };
+
             Style style34 = new Style() { Type = StyleValues.Character, StyleId = "VerbatimChar", CustomStyle = true };
             StyleName styleName34 = new StyleName() { Val = "Verbatim Char" };
             BasedOn basedOn23 = new BasedOn() { Val = "ad" };
@@ -2292,6 +2379,8 @@ namespace md2docx
             styles1.Append(style14);
             styles1.Append(style17);
             styles1.Append(style18);
+            styles1.Append(style19);
+            styles1.Append(style20);
             styles1.Append(style34);
             styles1.Append(style44);
             
@@ -2352,13 +2441,13 @@ namespace md2docx
             font3.Append(pitch3);
             font3.Append(fontSignature3);
 
-            Font font4 = new Font() { Name = "等线" };
-            AltName altName2 = new AltName() { Val = "DengXian" };
-            Panose1Number panose1Number4 = new Panose1Number() { Val = "02010600030101010101" };
+            Font font4 = new Font() { Name = "黑体" };
+            AltName altName2 = new AltName() { Val = "SimHei" };
+            Panose1Number panose1Number4 = new Panose1Number() { Val = "02010609060101010101" };
             FontCharSet fontCharSet4 = new FontCharSet() { Val = "86" };
-            FontFamily fontFamily4 = new FontFamily() { Val = FontFamilyValues.Auto };
-            Pitch pitch4 = new Pitch() { Val = FontPitchValues.Variable };
-            FontSignature fontSignature4 = new FontSignature() { UnicodeSignature0 = "A00002BF", UnicodeSignature1 = "38CF7CFA", UnicodeSignature2 = "00000016", UnicodeSignature3 = "00000000", CodePageSignature0 = "0004000F", CodePageSignature1 = "00000000" };
+            FontFamily fontFamily4 = new FontFamily() { Val = FontFamilyValues.Modern };
+            Pitch pitch4 = new Pitch() { Val = FontPitchValues.Fixed };
+            FontSignature fontSignature4 = new FontSignature() { UnicodeSignature0 = "800002BF", UnicodeSignature1 = "38CF7CFA", UnicodeSignature2 = "00000016", UnicodeSignature3 = "00000000", CodePageSignature0 = "00040001", CodePageSignature1 = "00000000" };
 
             font4.Append(altName2);
             font4.Append(panose1Number4);
