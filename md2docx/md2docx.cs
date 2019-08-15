@@ -208,6 +208,8 @@ namespace md2docx
                 Add_abstract(e_title, e_abs, e_kew, false, ref docBody);
             }
 
+            GenerateTOC(ref docBody);
+
             // rendering body text(paragraph/heading, others are TBD)
             foreach (var element in document.Blocks)
             {
@@ -1430,6 +1432,108 @@ namespace md2docx
             docBody.Append(paragraph27);
         }
 
+        private static void GenerateTOC(ref Body docBody)
+        {
+            Paragraph para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Abs" },
+                    PageBreakBefore = new PageBreakBefore()
+                }
+            };
+            Run run = new Run
+            {
+                RunProperties = new RunProperties()
+            };
+            Text txt = new Text { Text = "目录" };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            SdtBlock sdtBlock1 = new SdtBlock();
+
+            SdtProperties sdtProperties1 = new SdtProperties();
+
+            RunProperties runProperties1 = new RunProperties();
+            Languages languages1 = new Languages() { Val = "zh-CN" };
+
+            runProperties1.Append(languages1);
+            SdtId sdtId1 = new SdtId() { Val = 504253948 };
+
+            SdtContentDocPartObject sdtContentDocPartObject1 = new SdtContentDocPartObject();
+            DocPartGallery docPartGallery1 = new DocPartGallery() { Val = "Table of Contents" };
+            DocPartUnique docPartUnique1 = new DocPartUnique();
+
+            sdtContentDocPartObject1.Append(docPartGallery1);
+            sdtContentDocPartObject1.Append(docPartUnique1);
+
+            sdtProperties1.Append(runProperties1);
+            sdtProperties1.Append(sdtId1);
+            sdtProperties1.Append(sdtContentDocPartObject1);
+
+            SdtEndCharProperties sdtEndCharProperties1 = new SdtEndCharProperties();
+
+            RunProperties runProperties2 = new RunProperties();
+            RunFonts runFonts1 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
+            Bold bold1 = new Bold();
+            BoldComplexScript boldComplexScript1 = new BoldComplexScript();
+            Color color1 = new Color() { Val = "auto" };
+            Kern kern1 = new Kern() { Val = (UInt32Value)2U };
+            FontSize fontSize1 = new FontSize() { Val = "24" };
+            FontSizeComplexScript fontSizeComplexScript1 = new FontSizeComplexScript() { Val = "24" };
+
+            runProperties2.Append(runFonts1);
+            runProperties2.Append(bold1);
+            runProperties2.Append(boldComplexScript1);
+            runProperties2.Append(color1);
+            runProperties2.Append(kern1);
+            runProperties2.Append(fontSize1);
+            runProperties2.Append(fontSizeComplexScript1);
+
+            sdtEndCharProperties1.Append(runProperties2);
+
+            SdtContentBlock sdtContentBlock1 = new SdtContentBlock();
+
+            Paragraph paragraph3 = new Paragraph() { RsidParagraphAddition = "003863DC", RsidRunAdditionDefault = "003863DC", ParagraphId = "233F4095", TextId = "52301D4D" };
+
+            SimpleField simpleField1 = new SimpleField() { Instruction = " TOC \\o \"1-3\" \\h \\z \\u " };
+
+            Run run4 = new Run();
+
+            RunProperties runProperties5 = new RunProperties
+            {
+                FontSize = new FontSize { Val = "24" },
+                FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
+            };
+            RunFonts runFonts2 = new RunFonts() { Hint = FontTypeHintValues.EastAsia };
+            Bold bold2 = new Bold();
+            BoldComplexScript boldComplexScript2 = new BoldComplexScript();
+            NoProof noProof1 = new NoProof();
+
+            runProperties5.Append(runFonts2);
+            runProperties5.Append(bold2);
+            runProperties5.Append(boldComplexScript2);
+            runProperties5.Append(noProof1);
+            Text text3 = new Text();
+            text3.Text = "请手动点击<更新目录>按钮更新目录";
+
+            run4.Append(runProperties5);
+            run4.Append(text3);
+
+            simpleField1.Append(run4);
+
+            paragraph3.Append(simpleField1);
+            
+            sdtContentBlock1.Append(paragraph3);
+
+            sdtBlock1.Append(sdtProperties1);
+            sdtBlock1.Append(sdtEndCharProperties1);
+            sdtBlock1.Append(sdtContentBlock1);
+
+            docBody.Append(sdtBlock1);
+        }
+
         private static void GenerateImagePart1Content(ImagePart imagePart1)
         {
             System.IO.Stream data = GetBinaryDataStream(imagePart1Data);
@@ -1544,7 +1648,7 @@ namespace md2docx
         private static void Add_abstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
         {
             string subtitle = isCN ? "摘要" : "ABSTRACT";
-            string keyWT = isCN ? "关键词：" : "Key words ";
+            string keyWT = isCN ? "关键词：" : "Key words: ";
             Paragraph para = new Paragraph
             {
                 ParagraphProperties = new ParagraphProperties
@@ -1625,7 +1729,7 @@ namespace md2docx
             run.Append(txt);
             para.Append(run);
             run = new Run { RunProperties = new RunProperties() };
-            txt = new Text { Text = c_kew, Space = SpaceProcessingModeValues.Preserve };
+            txt = new Text { Text = keyWords, Space = SpaceProcessingModeValues.Preserve };
             run.Append(txt);
             para.Append(run);
             docBody.Append(para);
@@ -2468,15 +2572,6 @@ namespace md2docx
             LatentStyleExceptionInfo latentStyleExceptionInfo17 = new LatentStyleExceptionInfo() { Name = "index 7", SemiHidden = true, UnhideWhenUsed = true };
             LatentStyleExceptionInfo latentStyleExceptionInfo18 = new LatentStyleExceptionInfo() { Name = "index 8", SemiHidden = true, UnhideWhenUsed = true };
             LatentStyleExceptionInfo latentStyleExceptionInfo19 = new LatentStyleExceptionInfo() { Name = "index 9", SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo20 = new LatentStyleExceptionInfo() { Name = "toc 1", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo21 = new LatentStyleExceptionInfo() { Name = "toc 2", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo22 = new LatentStyleExceptionInfo() { Name = "toc 3", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo23 = new LatentStyleExceptionInfo() { Name = "toc 4", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo24 = new LatentStyleExceptionInfo() { Name = "toc 5", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo25 = new LatentStyleExceptionInfo() { Name = "toc 6", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo26 = new LatentStyleExceptionInfo() { Name = "toc 7", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo27 = new LatentStyleExceptionInfo() { Name = "toc 8", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
-            LatentStyleExceptionInfo latentStyleExceptionInfo28 = new LatentStyleExceptionInfo() { Name = "toc 9", UiPriority = 39, SemiHidden = true, UnhideWhenUsed = true };
             LatentStyleExceptionInfo latentStyleExceptionInfo29 = new LatentStyleExceptionInfo() { Name = "Normal Indent", SemiHidden = true, UnhideWhenUsed = true };
             LatentStyleExceptionInfo latentStyleExceptionInfo30 = new LatentStyleExceptionInfo() { Name = "footnote text", SemiHidden = true, UnhideWhenUsed = true };
             LatentStyleExceptionInfo latentStyleExceptionInfo31 = new LatentStyleExceptionInfo() { Name = "annotation text", SemiHidden = true, UnhideWhenUsed = true };
@@ -2845,15 +2940,6 @@ namespace md2docx
             latentStyles1.Append(latentStyleExceptionInfo17);
             latentStyles1.Append(latentStyleExceptionInfo18);
             latentStyles1.Append(latentStyleExceptionInfo19);
-            latentStyles1.Append(latentStyleExceptionInfo20);
-            latentStyles1.Append(latentStyleExceptionInfo21);
-            latentStyles1.Append(latentStyleExceptionInfo22);
-            latentStyles1.Append(latentStyleExceptionInfo23);
-            latentStyles1.Append(latentStyleExceptionInfo24);
-            latentStyles1.Append(latentStyleExceptionInfo25);
-            latentStyles1.Append(latentStyleExceptionInfo26);
-            latentStyles1.Append(latentStyleExceptionInfo27);
-            latentStyles1.Append(latentStyleExceptionInfo28);
             latentStyles1.Append(latentStyleExceptionInfo29);
             latentStyles1.Append(latentStyleExceptionInfo30);
             latentStyles1.Append(latentStyleExceptionInfo31);
@@ -3211,6 +3297,8 @@ namespace md2docx
             StyleRunProperties styleRunProperties1 = new StyleRunProperties();
             RunFonts runFonts22 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
             Color color1 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
+            styleRunProperties1.FontSize = new FontSize { Val = "24" };
+            styleRunProperties1.FontSizeComplexScript = new FontSizeComplexScript { Val = "24" };
 
             styleRunProperties1.Append(runFonts22);
             styleRunProperties1.Append(color1);
@@ -3493,9 +3581,50 @@ namespace md2docx
                 }
             };
 
+            Style style21 = new Style
+            {
+                Type = StyleValues.Paragraph,
+                StyleId = "TOC 1",
+                StyleName = new StyleName { Val = "TOC 1" },
+                BasedOn = new BasedOn { Val = "Normal" },
+                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
+                AutoRedefine = new AutoRedefine(),
+                UIPriority = new UIPriority { Val = 39 }
+            };
+
+            Style style22 = new Style
+            {
+                Type = StyleValues.Paragraph,
+                StyleId = "TOC 2",
+                StyleName = new StyleName { Val = "TOC 2" },
+                BasedOn = new BasedOn { Val = "Normal" },
+                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
+                AutoRedefine = new AutoRedefine(),
+                UIPriority = new UIPriority { Val = 39 },
+                StyleParagraphProperties = new StyleParagraphProperties
+                {
+                    Indentation = new Indentation { Left = "420", LeftChars = 200}
+                }
+            };
+
+            Style style23 = new Style
+            {
+                Type = StyleValues.Paragraph,
+                StyleId = "TOC 3",
+                StyleName = new StyleName { Val = "TOC 3" },
+                BasedOn = new BasedOn { Val = "Normal" },
+                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
+                AutoRedefine = new AutoRedefine(),
+                UIPriority = new UIPriority { Val = 39 },
+                StyleParagraphProperties = new StyleParagraphProperties
+                {
+                    Indentation = new Indentation { Left = "840", LeftChars = 400 }
+                }
+            };
+
             Style style34 = new Style() { Type = StyleValues.Character, StyleId = "VerbatimChar", CustomStyle = true };
             StyleName styleName34 = new StyleName() { Val = "Verbatim Char" };
-            BasedOn basedOn23 = new BasedOn() { Val = "ad" };
+            BasedOn basedOn23 = new BasedOn() { Val = "Normal" };
 
             StyleRunProperties styleRunProperties21 = new StyleRunProperties();
             RunFonts runFonts18 = new RunFonts() { Ascii = "Consolas", HighAnsi = "Consolas" };
@@ -3534,6 +3663,9 @@ namespace md2docx
             styles1.Append(style18);
             styles1.Append(style19);
             styles1.Append(style20);
+            styles1.Append(style21);
+            styles1.Append(style22);
+            styles1.Append(style23);
             styles1.Append(style34);
             styles1.Append(style44);
             
