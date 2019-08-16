@@ -203,6 +203,8 @@ namespace md2docx
 
             Body docBody = new Body();
 
+            bool genEnd = false;
+
             ImagePart imagePart1 = mainDocumentPart1.AddNewPart<ImagePart>("image/jpeg", "rId8");
             GenerateImagePart1Content(imagePart1);
             GenerateCover(ref docBody);
@@ -255,9 +257,10 @@ namespace md2docx
                 }
                 else if (element is QuoteBlock refer)
                 {
-                    if (endnote != "")
+                    if (endnote != "" && !genEnd)
                     {
                         Add_endnote(endnote, "结束语", ref docBody);
+                        genEnd = true;
                     }
 
                     Paragraph para = new Paragraph
@@ -281,6 +284,12 @@ namespace md2docx
                 {
                     throw new Exception($"Rendering {element.GetType()} not implement yet");
                 }
+            }
+
+            if (endnote != "" && !genEnd)
+            {
+                Add_endnote(endnote, "结束语", ref docBody);
+                genEnd = true;
             }
 
             SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };

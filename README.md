@@ -1,26 +1,28 @@
 # md2docx-csharp
 
-使用C#开发的md2docx工具。
+使用C#开发的将markdown转换为docx的工具。
 
-## TBD
+该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前1.0版已经完工，下一步动向见TODO。
 
-这个项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前还在开发中，在功能达到完善之前不会进一步更新文档。
+## 快速开始
 
-目前进度如下：
+下载release中的`Release.zip`，解压后在解压的目录中，命令行使用，若无参数，则默认输入文件为同文件夹下的`test.md`。
 
-- [x] 根据YAML头输出一个有姓名等内容的基本文档
-- [x] 标题、正文
-- [x] 摘要、关键词、结束语
-- [x] 页边距
-- [x] 参考文献
-- [x] 封面
-- [x] 目录
+运行参数为`md2docx.exe <md input path> <docx output path>`，若不指定第一个参数，则默认读入同目录的`test.md`，若不指定第二个参数，则按照`<name><ID><filename>.docx`存储文件，各参数来自于markdown文件的yaml头部。
 
-以上为我心中该项目demo的应有功能，在此之前除了更新进度外不会做进一步的文档更新。
+## 编译
 
-同时以下功能虽然也可以开发，但是考虑其复杂性无法保证进度，并且手动调整相对方便。在我有空之后会继续开发以下功能。
+使用Visual Studio(>=2017)打开.sln后进行编译，如果有缺少的库、VS支持，VS（理论上）会进行提示并可以进行相对自动化的安装。
+
+## Markdown语法
+
+见[specification](./docs/spec.md)
+
+## TODO
 
 - [ ] 页眉
 - [ ] 页脚
+- [ ] 将格式等设置改为配置文件而非硬编码
+- [ ] 将parser更换成一个标准更接近GFM的parser
 - [ ] 图片
 - [ ] 表格
