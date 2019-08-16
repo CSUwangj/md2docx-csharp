@@ -37,13 +37,19 @@ namespace md2docx
 
         private static void Main(string[] args)
         {
-            string md = System.IO.File.ReadAllText("test.md");
-            string filePath = ("test.docx");
-            Console.WriteLine(md);
-
+            string mdPath = "test.md";
+            string filePath = "";
+            if (args.Length > 0)
+            {
+                mdPath = args[0];
+            }
+            if (args.Length > 1)
+            {
+                filename = args[1];
+            }
+            string md = System.IO.File.ReadAllText(mdPath);
             MarkdownDocument mddoc = new MarkdownDocument();
             mddoc.Parse(md);
-
 
             foreach (var element in mddoc.Blocks)
             {
@@ -55,7 +61,10 @@ namespace md2docx
                     department = yaml.Children["department"];
                     filename = yaml.Children["filename"];
                     clas = yaml.Children["class"];
-                    filePath = id + name + filename + ".docx";
+                    if (filePath == "")
+                    {
+                        filePath = id + name + filename + ".docx";
+                    }
 
                     if (yaml.Children.ContainsKey("e_abs"))
                     {
