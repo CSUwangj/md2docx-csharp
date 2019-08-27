@@ -3,16 +3,9 @@ using Microsoft.Toolkit.Parsers.Markdown;
 using Microsoft.Toolkit.Parsers.Markdown.Blocks;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
-using Ap = DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml;
-using A = DocumentFormat.OpenXml.Drawing;
-using Thm15 = DocumentFormat.OpenXml.Office2013.Theme;
-using Ovml = DocumentFormat.OpenXml.Vml.Office;
-using V = DocumentFormat.OpenXml.Vml;
-using M = DocumentFormat.OpenXml.Math;
-using W14 = DocumentFormat.OpenXml.Office2010.Word;
-using W15 = DocumentFormat.OpenXml.Office2013.Word;
 using Microsoft.Toolkit.Parsers.Markdown.Inlines;
+using A = DocumentFormat.OpenXml.Drawing;
 using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
 
