@@ -109,97 +109,10 @@ namespace md2docx
             }
         }
 
-        // Generates content of extendedFilePropertiesPart1.
-        private static void GenerateExtendedFilePropertiesPart1Content(ExtendedFilePropertiesPart extendedFilePropertiesPart1)
-        {
-            Ap.Properties properties1 = new Ap.Properties();
-            properties1.AddNamespaceDeclaration("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes");
-            Ap.Template template1 = new Ap.Template();
-            template1.Text = "Normal.dotm";
-            Ap.TotalTime totalTime1 = new Ap.TotalTime();
-            totalTime1.Text = "0";
-            Ap.Pages pages1 = new Ap.Pages();
-            pages1.Text = "1";
-            Ap.Words words1 = new Ap.Words();
-            words1.Text = "0";
-            Ap.Characters characters1 = new Ap.Characters();
-            characters1.Text = "0";
-            Ap.Application application1 = new Ap.Application();
-            application1.Text = "Microsoft Office Word";
-            Ap.DocumentSecurity documentSecurity1 = new Ap.DocumentSecurity();
-            documentSecurity1.Text = "0";
-            Ap.Lines lines1 = new Ap.Lines();
-            lines1.Text = "0";
-            Ap.Paragraphs paragraphs1 = new Ap.Paragraphs();
-            paragraphs1.Text = "0";
-            Ap.ScaleCrop scaleCrop1 = new Ap.ScaleCrop();
-            scaleCrop1.Text = "false";
-            Ap.Company company1 = new Ap.Company();
-            company1.Text = "";
-            Ap.LinksUpToDate linksUpToDate1 = new Ap.LinksUpToDate();
-            linksUpToDate1.Text = "false";
-            Ap.CharactersWithSpaces charactersWithSpaces1 = new Ap.CharactersWithSpaces();
-            charactersWithSpaces1.Text = "0";
-            Ap.SharedDocument sharedDocument1 = new Ap.SharedDocument();
-            sharedDocument1.Text = "false";
-            Ap.HyperlinksChanged hyperlinksChanged1 = new Ap.HyperlinksChanged();
-            hyperlinksChanged1.Text = "false";
-            Ap.ApplicationVersion applicationVersion1 = new Ap.ApplicationVersion();
-            applicationVersion1.Text = "16.0000";
-
-            properties1.Append(template1);
-            properties1.Append(totalTime1);
-            properties1.Append(pages1);
-            properties1.Append(words1);
-            properties1.Append(characters1);
-            properties1.Append(application1);
-            properties1.Append(documentSecurity1);
-            properties1.Append(lines1);
-            properties1.Append(paragraphs1);
-            properties1.Append(scaleCrop1);
-            properties1.Append(company1);
-            properties1.Append(linksUpToDate1);
-            properties1.Append(charactersWithSpaces1);
-            properties1.Append(sharedDocument1);
-            properties1.Append(hyperlinksChanged1);
-            properties1.Append(applicationVersion1);
-
-            extendedFilePropertiesPart1.Properties = properties1;
-        }
-
         // Generates content of mainDocumentPart1.
         private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document)
         {
-            Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid wp14" } };
-            document1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
-            document1.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
-            document1.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
-            document1.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
-            document1.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
-            document1.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
-            document1.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
-            document1.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
-            document1.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
-            document1.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
-            document1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            document1.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
-            document1.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
-            document1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
-            document1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            document1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-            document1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
-            document1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
-            document1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
-            document1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
-            document1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            document1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            document1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-            document1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
-            document1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
-            document1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
-            document1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
-            document1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
-            document1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() };
 
             Body docBody = new Body();
 
@@ -1785,14 +1698,7 @@ namespace md2docx
         // Generates content of webSettingsPart1.
         private static void GenerateWebSettingsPart1Content(WebSettingsPart webSettingsPart1)
         {
-            WebSettings webSettings1 = new WebSettings() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
-            webSettings1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            webSettings1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            webSettings1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            webSettings1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            webSettings1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-            webSettings1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
-            webSettings1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            WebSettings webSettings1 = new WebSettings() { MCAttributes = new MarkupCompatibilityAttributes() };
             OptimizeForBrowser optimizeForBrowser1 = new OptimizeForBrowser();
             AllowPNG allowPNG1 = new AllowPNG();
 
@@ -2397,19 +2303,7 @@ namespace md2docx
         // Generates content of documentSettingsPart1.
         private static void GenerateDocumentSettingsPart1Content(DocumentSettingsPart documentSettingsPart1)
         {
-            Settings settings1 = new Settings() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
-            settings1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            settings1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
-            settings1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            settings1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-            settings1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
-            settings1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
-            settings1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            settings1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            settings1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-            settings1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
-            settings1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
-            settings1.AddNamespaceDeclaration("sl", "http://schemas.openxmlformats.org/schemaLibrary/2006/main");
+            Settings settings1 = new Settings() { MCAttributes = new MarkupCompatibilityAttributes() };
             Zoom zoom1 = new Zoom() { Percent = "110" };
             BordersDoNotSurroundHeader bordersDoNotSurroundHeader1 = new BordersDoNotSurroundHeader();
             BordersDoNotSurroundFooter bordersDoNotSurroundFooter1 = new BordersDoNotSurroundFooter();
@@ -2542,14 +2436,7 @@ namespace md2docx
         // Generates content of styleDefinitionsPart1.
         private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1)
         {
-            Styles styles1 = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
-            styles1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            styles1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            styles1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            styles1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            styles1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-            styles1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
-            styles1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            Styles styles1 = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() };
 
             DocDefaults docDefaults1 = new DocDefaults();
 
@@ -3694,14 +3581,7 @@ namespace md2docx
         // Generates content of fontTablePart1.
         private static void GenerateFontTablePart1Content(FontTablePart fontTablePart1)
         {
-            Fonts fonts1 = new Fonts() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid" } };
-            fonts1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            fonts1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            fonts1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            fonts1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            fonts1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-            fonts1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
-            fonts1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            Fonts fonts1 = new Fonts() { MCAttributes = new MarkupCompatibilityAttributes() };
 
             Font font1 = new Font() { Name = "Times New Roman" };
             Panose1Number panose1Number1 = new Panose1Number() { Val = "02020603050405020304" };
