@@ -12,17 +12,35 @@
 
 ## 编译
 
+### Visual Studio
+
 使用Visual Studio(>=2017)打开.sln后进行编译，如果有缺少的库、VS支持，VS（理论上）会进行提示并可以进行相对自动化的安装。
+
+### MSBuild
+
+`MSBuild.exe Solution.sln /p:Configuration=Debug /p:Platform="Any CPU"`
+
+`MSBuild.exe Solution.sln /p:Configuration=Release /p:Platform="Any CPU"`
+
+输出路径为`md2docx\bin\(Debug|Release)`
 
 ## Markdown语法
 
 见[specification](./docs/spec.md)
 
+## 文档
+
+TBD
+
+在我的[博客](https://csuwangj.github.io/%E7%BC%96%E7%A8%8B%E6%98%AF%E5%BE%88%E5%A5%BD%E7%8E%A9%E7%9A%84-md2docx%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%87%BA%E6%9D%A5%E7%9A%84/)中对写这个程序的过程做了一个简介，同时总结了一下用到的资料，暂且先用它吧。
+
 ## TODO
 
+- [ ] 加入测试（并重构）
+- [ ] 部署CI
+- [ ] 将parser更换成一个标准更接近GFM的parser
+- [ ] 将格式等设置改为配置文件而非硬编码
 - [ ] 页眉
 - [ ] 页脚
-- [ ] 将格式等设置改为配置文件而非硬编码
-- [ ] 将parser更换成一个标准更接近GFM的parser
 - [ ] 图片
 - [ ] 表格
