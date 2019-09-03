@@ -1692,10 +1692,18 @@ namespace md2docx
                     {
                         RunFonts = new RunFonts { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" },
                         Kern = new Kern { Val = 2U },
-                        Languages = new Languages { Val = "en-US", EastAsia = "zh-CN", Bidi = "ar-SA"}
+                        Languages = new Languages { Val = "en-US", EastAsia = "zh-CN", Bidi = "ar-SA" },
+                        FontSize = new FontSize { Val = "24" },
+                        FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
                     }
                 },
-                ParagraphPropertiesDefault = new ParagraphPropertiesDefault()
+                ParagraphPropertiesDefault = new ParagraphPropertiesDefault
+                {
+                    ParagraphPropertiesBaseStyle = new ParagraphPropertiesBaseStyle
+                    {
+                        Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 }
+                    }
+                }
             };
 
             Style style1 = new Style
