@@ -89,7 +89,7 @@ namespace md2docx
             return style;
         }
         #region Chinese font mapping
-        static readonly Dictionary<string, string> fontmap = new Dictionary<string, string>
+        static private readonly Dictionary<string, string> fontmap = new Dictionary<string, string>
         {
             {"初号", "84"},
             {"小初", "72"},
@@ -110,7 +110,7 @@ namespace md2docx
         };
         #endregion
         #region justification mapping
-        static readonly Dictionary<string, JustificationValues> justmap = new Dictionary<string, JustificationValues>
+        static private readonly Dictionary<string, JustificationValues> justmap = new Dictionary<string, JustificationValues>
         {
             { "左对齐", JustificationValues.Left },
             { "居中", JustificationValues.Center },

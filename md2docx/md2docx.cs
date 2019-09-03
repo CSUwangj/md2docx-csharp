@@ -8,6 +8,7 @@ using Microsoft.Toolkit.Parsers.Markdown.Inlines;
 using A = DocumentFormat.OpenXml.Drawing;
 using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
+using Newtonsoft.Json.Linq;
 
 namespace md2docx
 {
@@ -28,19 +29,36 @@ namespace md2docx
         static string endnote = "";
         static string filename = "";
 
+        private static void Usage()
+        {
+            Console.WriteLine(@"Usage: ./md2docx {markdown} {config_json} {output}
+default parameter will be 
+markdown    -> input.md
+config_json -> config.json
+output      -> <id><name><filename>.docx");
+        }
+
         private static void Main(string[] args)
         {
-            string mdPath = "test.md";
+            string mdPath = "input.md";
             string filePath = "";
-            if (args.Length > 0)
+            string configPath = "config.json";
+
+            if (args.Length < 2)
+            {
+                Usage();
+            }
+            else 
             {
                 mdPath = args[0];
+                configPath = args[1];
             }
-            if (args.Length > 1)
+            if (args.Length > 2)
             {
-                filename = args[1];
+                filePath = args[2];
             }
             string md = System.IO.File.ReadAllText(mdPath);
+            JObject config = JObject.Parse(System.IO.File.ReadAllText(configPath));
             MarkdownDocument mddoc = new MarkdownDocument();
             mddoc.Parse(md);
 
@@ -81,10 +99,10 @@ namespace md2docx
             using (WordprocessingDocument document = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
                 MainDocumentPart mainDocumentPart1 = document.AddMainDocumentPart();
-                GenerateMainDocumentPart1Content(mainDocumentPart1, mddoc);
+                GenerateMainDocumentPart1Content(mainDocumentPart1, mddoc, (JObject)config["对应关系"], (JObject)config["可选部分"]);
               
                 StyleDefinitionsPart styleDefinitionsPart1 = mainDocumentPart1.AddNewPart<StyleDefinitionsPart>("rId1");
-                GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1);
+                GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1, (JArray)config["样式"], (bool)config["可选部分"]["延迟样式"]);
 
                 FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId6");
                 GenerateFontTablePart1Content(fontTablePart1);
@@ -94,7 +112,7 @@ namespace md2docx
         }
 
         // Generates content of mainDocumentPart1.
-        private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document)
+        private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document, JObject correspondecs, JObject optionalParts)
         {
             Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() };
 
@@ -127,7 +145,7 @@ namespace md2docx
                     {
                         ParagraphProperties = new ParagraphProperties
                         {
-                            ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                            ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                         }
                     };
                     foreach (var inline in mpara.Inlines)
@@ -141,7 +159,7 @@ namespace md2docx
                     switch (mhead.HeaderLevel)
                     {
                         case int i when i < 4:
-                            docPara.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = $"Heading{i}" };
+                            docPara.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = $"heading {i}" };
                             break;
                         default:
                             throw new Exception($"Rendering {element.GetType()} not implement yet");
@@ -154,24 +172,6 @@ namespace md2docx
                 }
                 else if (element is QuoteBlock refer)
                 {
-                    if (endnote != "" && !genEnd)
-                    {
-                        Add_endnote(endnote, "结束语", ref docBody);
-                        genEnd = true;
-                    }
-
-                    Paragraph para = new Paragraph
-                    {
-                        ParagraphProperties = new ParagraphProperties
-                        {
-                            ParagraphStyleId = new ParagraphStyleId { Val = "endtitle" }
-                        }
-                    };
-                    Run run = new Run { RunProperties = new RunProperties() };
-                    Text txt = new Text { Text = "参考文献", Space = SpaceProcessingModeValues.Preserve };
-                    run.Append(txt);
-                    para.Append(run);
-                    docBody.Append(para);
                     foreach (var e in refer.Blocks)
                     {
                         Deal_quote_refer(e, ref docBody);
@@ -183,13 +183,7 @@ namespace md2docx
                 }
             }
 
-            if (endnote != "" && !genEnd)
-            {
-                Add_endnote(endnote, "结束语", ref docBody);
-                genEnd = true;
-            }
-
-            SectionProperties sectionProperties1 = new SectionProperties() { RsidR = "00803857" };
+            SectionProperties sectionProperties1 = new SectionProperties();
             PageSize pageSize1 = new PageSize() { Width = (UInt32Value)11906U, Height = (UInt32Value)16838U };
             PageMargin pageMargin1 = new PageMargin() { Top = 1418, Right = (UInt32Value)1134U, Bottom = 1418, Left = (UInt32Value)1701U, Header = (UInt32Value)851U, Footer = (UInt32Value)992U, Gutter = (UInt32Value)0U };
             Columns columns1 = new Columns() { Space = "425" };
@@ -1603,7 +1597,7 @@ namespace md2docx
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                 }
             };
             run = new Run { RunProperties = new RunProperties() };
@@ -1616,7 +1610,7 @@ namespace md2docx
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                 }
             };
             run = new Run { RunProperties = new RunProperties() };
@@ -1629,7 +1623,7 @@ namespace md2docx
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                 }
             };
             run = new Run
@@ -1669,7 +1663,7 @@ namespace md2docx
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "BodyText" }
+                    ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                 }
             };
             run = new Run { RunProperties = new RunProperties() };
@@ -1680,11 +1674,11 @@ namespace md2docx
         }
       
         // Generates content of styleDefinitionsPart1.
-        private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1)
+        private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1, JArray styleConfig, bool latent)
         {
-            Styles styles1 = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() };
+            Styles styles = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() };
 
-            DocDefaults docDefaults1 = new DocDefaults
+            DocDefaults docDefaults = new DocDefaults
             {
                 RunPropertiesDefault = new RunPropertiesDefault
                 {
@@ -1699,373 +1693,24 @@ namespace md2docx
                 },
                 ParagraphPropertiesDefault = new ParagraphPropertiesDefault
                 {
-                    ParagraphPropertiesBaseStyle = new ParagraphPropertiesBaseStyle
-                    {
-                        Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 }
-                    }
                 }
             };
 
-            Style style1 = new Style
+            styles.Append(docDefaults);
+
+            if (latent)
             {
-                Type = StyleValues.Paragraph,
-                StyleId = "Normal",
-                Default = true,
-                StyleName = new StyleName { Val = "Normal" },
-                PrimaryStyle = new PrimaryStyle(),
-                StyleRunProperties = new StyleRunProperties
-                {
-                    RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" },
-                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
-                    FontSize = new FontSize { Val = "24" },
-                    FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
-                }
-            };
+                styles.Append(GeneratedCode.GenerateLatentStyles());
+            }
 
-            Style style2 = new Style
+            StyleFactory styleFactory = new StyleFactory();
+            foreach(JObject jObject in styleConfig)
             {
-                Type = StyleValues.Paragraph,
-                StyleId = "Heading1",
-                StyleName = new StyleName { Val = "heading 1" },
-                UIPriority = new UIPriority { Val = 9 },
-                PrimaryStyle = new PrimaryStyle(),
-                StyleParagraphProperties = new StyleParagraphProperties
-                {
-                    KeepLines = new KeepLines(),
-                    KeepNext = new KeepNext(),
-                    PageBreakBefore = new PageBreakBefore(),
-                    SpacingBetweenLines = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 },
-                    Justification = new Justification() { Val = JustificationValues.Center },
-                    OutlineLevel = new OutlineLevel() { Val = 0 }
-                },
-                StyleRunProperties = new StyleRunProperties
-                {
-                    RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScript = "Times New Roman" },
-                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
-                    FontSize = new FontSize {  Val = "32" },
-                    FontSizeComplexScript = new FontSizeComplexScript { Val = "32" }
-                }
-            };
+                Style style = styleFactory.GenerateStyle(jObject);
+                styles.Append(style);
+            }
 
-            Style style3 = new Style() { Type = StyleValues.Paragraph, StyleId = "Heading2" };
-            StyleName styleName3 = new StyleName() { Val = "heading 2" };
-            BasedOn basedOn1 = new BasedOn() { Val = "Normal" };
-            NextParagraphStyle nextParagraphStyle2 = new NextParagraphStyle() { Val = "BodyText" };
-            UIPriority uIPriority2 = new UIPriority() { Val = 9 };
-            UnhideWhenUsed unhideWhenUsed1 = new UnhideWhenUsed();
-            PrimaryStyle primaryStyle3 = new PrimaryStyle();
-            Rsid rsid3 = new Rsid() { Val = "00BE5CD0" };
-
-            StyleParagraphProperties styleParagraphProperties2 = new StyleParagraphProperties();
-            KeepNext keepNext2 = new KeepNext();
-            KeepLines keepLines2 = new KeepLines();
-            SpacingBetweenLines spacingBetweenLines3 = new SpacingBetweenLines() { Before = "200", After = "0" };
-            OutlineLevel outlineLevel2 = new OutlineLevel() { Val = 1 };
-
-            styleParagraphProperties2.Append(keepNext2);
-            styleParagraphProperties2.Append(keepLines2);
-            styleParagraphProperties2.Append(spacingBetweenLines3);
-            styleParagraphProperties2.Append(outlineLevel2);
-            styleParagraphProperties2.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
-
-            StyleRunProperties styleRunProperties3 = new StyleRunProperties();
-            RunFonts runFonts4 = new RunFonts() { EastAsia = "黑体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" };
-            BoldComplexScript boldComplexScript2 = new BoldComplexScript();
-            FontSize fontSize3 = new FontSize() { Val = "24" };
-            FontSizeComplexScript fontSizeComplexScript3 = new FontSizeComplexScript() { Val = "24" };
-
-            styleRunProperties3.Append(runFonts4);
-            styleRunProperties3.Append(boldComplexScript2);
-            styleRunProperties3.Append(fontSize3);
-            styleRunProperties3.Append(fontSizeComplexScript3);
-
-            style3.Append(styleName3);
-            style3.Append(basedOn1);
-            style3.Append(nextParagraphStyle2);
-            style3.Append(uIPriority2);
-            style3.Append(unhideWhenUsed1);
-            style3.Append(primaryStyle3);
-            style3.Append(rsid3);
-            style3.Append(styleParagraphProperties2);
-            style3.Append(styleRunProperties3);
-
-            Style style4 = new Style() { Type = StyleValues.Paragraph, StyleId = "Heading3" };
-            StyleName styleName4 = new StyleName() { Val = "heading 3" };
-            BasedOn basedOn2 = new BasedOn() { Val = "Normal" };
-            NextParagraphStyle nextParagraphStyle3 = new NextParagraphStyle() { Val = "BodyText" };
-            UIPriority uIPriority3 = new UIPriority() { Val = 9 };
-            UnhideWhenUsed unhideWhenUsed2 = new UnhideWhenUsed();
-            PrimaryStyle primaryStyle4 = new PrimaryStyle();
-            Rsid rsid4 = new Rsid() { Val = "00BE5CD0" };
-
-            StyleParagraphProperties styleParagraphProperties3 = new StyleParagraphProperties();
-            KeepNext keepNext3 = new KeepNext();
-            KeepLines keepLines3 = new KeepLines();
-            SpacingBetweenLines spacingBetweenLines4 = new SpacingBetweenLines() { Before = "200", After = "0"};
-            OutlineLevel outlineLevel3 = new OutlineLevel() { Val = 2 };
-
-            styleParagraphProperties3.Append(keepNext3);
-            styleParagraphProperties3.Append(keepLines3);
-            styleParagraphProperties3.Append(spacingBetweenLines4);
-            styleParagraphProperties3.Append(outlineLevel3);
-            styleParagraphProperties3.Indentation = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
-
-            StyleRunProperties styleRunProperties4 = new StyleRunProperties();
-            RunFonts runFonts5 = new RunFonts() { EastAsia = "楷体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" };
-            BoldComplexScript boldComplexScript3 = new BoldComplexScript();
-            FontSize fontSize4 = new FontSize() { Val = "24" };
-            FontSizeComplexScript fontSizeComplexScript4 = new FontSizeComplexScript() { Val = "24" };
-
-            styleRunProperties4.Append(runFonts5);
-            styleRunProperties4.Append(boldComplexScript3);
-            styleRunProperties4.Append(fontSize4);
-            styleRunProperties4.Append(fontSizeComplexScript4);
-
-            style4.Append(styleName4);
-            style4.Append(basedOn2);
-            style4.Append(nextParagraphStyle3);
-            style4.Append(uIPriority3);
-            style4.Append(unhideWhenUsed2);
-            style4.Append(primaryStyle4);
-            style4.Append(rsid4);
-            style4.Append(styleParagraphProperties3);
-            style4.Append(styleRunProperties4);
-
-            Style style14 = new Style() { Type = StyleValues.Paragraph, StyleId = "BodyText" };
-            StyleName styleName14 = new StyleName() { Val = "Body Text" };
-            LinkedStyle linkedStyle1 = new LinkedStyle() { Val = "BodyTextChar" };
-            PrimaryStyle primaryStyle11 = new PrimaryStyle();
-            Rsid rsid5 = new Rsid() { Val = "00D9265A" };
-
-            StyleParagraphProperties styleParagraphProperties10 = new StyleParagraphProperties();
-            SpacingBetweenLines spacingBetweenLines11 = new SpacingBetweenLines() { Before = "180", After = "180", Line = "360", LineRule = LineSpacingRuleValues.Auto };
-            Indentation indentation1 = new Indentation() { FirstLine = "200", FirstLineChars = 200 };
-
-            styleParagraphProperties10.Append(spacingBetweenLines11);
-            styleParagraphProperties10.Append(indentation1);
-
-            StyleRunProperties styleRunProperties11 = new StyleRunProperties();
-            RunFonts runFonts12 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
-            Color color9 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
-            FontSize fontSize5 = new FontSize() { Val = "24" };
-            FontSizeComplexScript fontSizeComplexScript5 = new FontSizeComplexScript() { Val = "24" };
-
-            styleRunProperties11.Append(runFonts12);
-            styleRunProperties11.Append(color9);
-            styleRunProperties11.Append(fontSize5);
-            styleRunProperties11.Append(fontSizeComplexScript5);
-
-            style14.Append(styleName14);
-            style14.Append(linkedStyle1);
-            style14.Append(primaryStyle11);
-            style14.Append(rsid5);
-            style14.Append(styleParagraphProperties10);
-            style14.Append(styleRunProperties11);
-
-            Style style17 = new Style() { Type = StyleValues.Paragraph, StyleId = "Abstract" };
-            StyleName styleName17 = new StyleName() { Val = "Abstract" };
-            NextParagraphStyle nextParagraphStyle11 = new NextParagraphStyle() { Val = "BodyText" };
-            PrimaryStyle primaryStyle14 = new PrimaryStyle();
-            Rsid rsid7 = new Rsid() { Val = "00BE5CD0" };
-
-            StyleParagraphProperties styleParagraphProperties13 = new StyleParagraphProperties();
-            KeepNext keepNext10 = new KeepNext();
-            PageBreakBefore pageBreakBefore2 = new PageBreakBefore();
-            KeepLines keepLines10 = new KeepLines();
-            SpacingBetweenLines spacingBetweenLines13 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 };
-            Justification justification2 = new Justification() { Val = JustificationValues.Center };
-
-            styleParagraphProperties13.Append(keepNext10);
-            styleParagraphProperties13.Append(keepLines10);
-            styleParagraphProperties13.Append(spacingBetweenLines13);
-            styleParagraphProperties13.Append(justification2);
-            styleParagraphProperties13.Append(pageBreakBefore2);
-
-            StyleRunProperties styleRunProperties13 = new StyleRunProperties();
-            RunFonts runFonts13 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
-            Color color10 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
-            FontSize fontSize6 = new FontSize() { Val = "36" };
-            FontSizeComplexScript fontSizeComplexScript6 = new FontSizeComplexScript() { Val = "36" };
-
-            styleRunProperties13.Append(runFonts13);
-            styleRunProperties13.Append(color10);
-            styleRunProperties13.Append(fontSize6);
-            styleRunProperties13.Append(fontSizeComplexScript6);
-
-            style17.Append(styleName17);
-            style17.Append(nextParagraphStyle11);
-            style17.Append(primaryStyle14);
-            style17.Append(rsid7);
-            style17.Append(styleParagraphProperties13);
-            style17.Append(styleRunProperties13);
-
-            Style style18 = new Style() { Type = StyleValues.Paragraph, StyleId = "Abs" };
-            StyleName styleName18 = new StyleName() { Val = "Abs" };
-            NextParagraphStyle nextParagraphStyle12 = new NextParagraphStyle() { Val = "BodyText" };
-            PrimaryStyle primaryStyle15 = new PrimaryStyle();
-            Rsid rsid8 = new Rsid() { Val = "00B5453C" };
-
-            StyleParagraphProperties styleParagraphProperties14 = new StyleParagraphProperties();
-            SpacingBetweenLines spacingBetweenLines14 = new SpacingBetweenLines() { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100, Line = "360", LineRule = LineSpacingRuleValues.Auto };
-            Justification justification3 = new Justification() { Val = JustificationValues.Center };
-
-            styleParagraphProperties14.Append(spacingBetweenLines14);
-            styleParagraphProperties14.Append(justification3);
-
-            StyleRunProperties styleRunProperties14 = new StyleRunProperties();
-            RunFonts runFonts14 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi };
-            BoldComplexScript boldComplexScript6 = new BoldComplexScript();
-            Color color11 = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 };
-            FontSize fontSize7 = new FontSize() { Val = "32" };
-            FontSizeComplexScript fontSizeComplexScript7 = new FontSizeComplexScript() { Val = "30" };
-
-            styleRunProperties14.Append(runFonts14);
-            styleRunProperties14.Append(boldComplexScript6);
-            styleRunProperties14.Append(color11);
-            styleRunProperties14.Append(fontSize7);
-            styleRunProperties14.Append(fontSizeComplexScript7);
-
-            style18.Append(styleName18);
-            style18.Append(nextParagraphStyle12);
-            style18.Append(primaryStyle15);
-            style18.Append(rsid8);
-            style18.Append(styleParagraphProperties14);
-            style18.Append(styleRunProperties14);
-
-            Style style19 = new Style
-            {
-                Type = StyleValues.Paragraph,
-                StyleId = "endtitle",
-                StyleName = new StyleName { Val = "endtitle" },
-                NextParagraphStyle = new NextParagraphStyle { Val = "reference" },
-                PrimaryStyle = new PrimaryStyle(),
-                StyleParagraphProperties = new StyleParagraphProperties
-                {
-                    KeepLines = new KeepLines(),
-                    KeepNext = new KeepNext(),
-                    PageBreakBefore = new PageBreakBefore(),
-                    SpacingBetweenLines = new SpacingBetweenLines { Before = "100", BeforeLines = 100, After = "100", AfterLines = 100 },
-                    Justification = new Justification { Val = JustificationValues.Center},
-                    OutlineLevel = new OutlineLevel { Val = 0 },
-                },
-                StyleRunProperties = new StyleRunProperties
-                {
-                    RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "黑体", ComplexScriptTheme = ThemeFontValues.MajorBidi },
-                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
-                    FontSize = new FontSize() { Val = "36" },
-                    FontSizeComplexScript = new FontSizeComplexScript() { Val = "36" },
-                }
-            };
-
-            Style style20 = new Style
-            {
-                Type = StyleValues.Paragraph,
-                StyleId = "reference",
-                StyleName = new StyleName { Val = "reference" },
-                NextParagraphStyle = new NextParagraphStyle { Val = "reference" },
-                PrimaryStyle = new PrimaryStyle(),
-                StyleParagraphProperties = new StyleParagraphProperties
-                {
-                    SpacingBetweenLines = new SpacingBetweenLines { Before = "180", After = "180", Line = "360", LineRule = LineSpacingRuleValues.Auto }
-                },
-                StyleRunProperties = new StyleRunProperties
-                {
-                    RunFonts = new RunFonts { EastAsia = "楷体", Ascii = "Times New Roman", HighAnsi = "Times New Roman", ComplexScript = "Times New Roman" },
-                    Color = new Color() { Val = "000000", ThemeColor = ThemeColorValues.Text1 },
-                    FontSize = new FontSize() { Val = "21" },
-                    FontSizeComplexScript = new FontSizeComplexScript() { Val = "21" },
-                }
-            };
-
-            Style style21 = new Style
-            {
-                Type = StyleValues.Paragraph,
-                StyleId = "TOC 1",
-                StyleName = new StyleName { Val = "TOC 1" },
-                BasedOn = new BasedOn { Val = "Normal" },
-                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
-                AutoRedefine = new AutoRedefine(),
-                UIPriority = new UIPriority { Val = 39 }
-            };
-
-            Style style22 = new Style
-            {
-                Type = StyleValues.Paragraph,
-                StyleId = "TOC 2",
-                StyleName = new StyleName { Val = "TOC 2" },
-                BasedOn = new BasedOn { Val = "Normal" },
-                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
-                AutoRedefine = new AutoRedefine(),
-                UIPriority = new UIPriority { Val = 39 },
-                StyleParagraphProperties = new StyleParagraphProperties
-                {
-                    Indentation = new Indentation { Left = "420", LeftChars = 200}
-                }
-            };
-
-            Style style23 = new Style
-            {
-                Type = StyleValues.Paragraph,
-                StyleId = "TOC 3",
-                StyleName = new StyleName { Val = "TOC 3" },
-                BasedOn = new BasedOn { Val = "Normal" },
-                NextParagraphStyle = new NextParagraphStyle { Val = "Normal" },
-                AutoRedefine = new AutoRedefine(),
-                UIPriority = new UIPriority { Val = 39 },
-                StyleParagraphProperties = new StyleParagraphProperties
-                {
-                    Indentation = new Indentation { Left = "840", LeftChars = 400 }
-                }
-            };
-
-            Style style34 = new Style() { Type = StyleValues.Character, StyleId = "VerbatimChar", CustomStyle = true };
-            StyleName styleName34 = new StyleName() { Val = "Verbatim Char" };
-            BasedOn basedOn23 = new BasedOn() { Val = "Normal" };
-
-            StyleRunProperties styleRunProperties21 = new StyleRunProperties();
-            RunFonts runFonts18 = new RunFonts() { Ascii = "Consolas", HighAnsi = "Consolas" };
-            FontSize fontSize9 = new FontSize() { Val = "22" };
-
-            styleRunProperties21.Append(runFonts18);
-            styleRunProperties21.Append(fontSize9);
-
-            style34.Append(styleName34);
-            style34.Append(basedOn23);
-            style34.Append(styleRunProperties21);
-
-            Style style44 = new Style() { Type = StyleValues.Paragraph, StyleId = "SourceCode", CustomStyle = true };
-            StyleName styleName44 = new StyleName() { Val = "Source Code" };
-            BasedOn basedOn33 = new BasedOn() { Val = "Normal" };
-            LinkedStyle linkedStyle9 = new LinkedStyle() { Val = "VerbatimChar" };
-
-            StyleParagraphProperties styleParagraphProperties26 = new StyleParagraphProperties();
-            WordWrap wordWrap1 = new WordWrap() { Val = false };
-
-            styleParagraphProperties26.Append(wordWrap1);
-
-            style44.Append(styleName44);
-            style44.Append(basedOn33);
-            style44.Append(linkedStyle9);
-            style44.Append(styleParagraphProperties26);
-
-            styles1.Append(docDefaults1);
-            styles1.Append(style1);
-            styles1.Append(style2);
-            styles1.Append(style3);
-            styles1.Append(style4);
-            styles1.Append(style14);
-            styles1.Append(style17);
-            styles1.Append(style18);
-            styles1.Append(style19);
-            styles1.Append(style20);
-            styles1.Append(style21);
-            styles1.Append(style22);
-            styles1.Append(style23);
-            styles1.Append(style34);
-            styles1.Append(style44);
-            
-
-            styleDefinitionsPart1.Styles = styles1;
+            styleDefinitionsPart1.Styles = styles;
         }
 
         // Generates content of fontTablePart1.

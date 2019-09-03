@@ -84,6 +84,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratedCode.cs" />
     <Compile Include="md2docx.cs" />
     <Compile Include="StyleFactory.cs" />
   </ItemGroup>
