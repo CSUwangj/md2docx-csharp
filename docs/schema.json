@@ -1,0 +1,336 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "config",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "样式",
+    "对应关系",
+    "可选部分"
+  ],
+  "properties": {
+    "样式": {
+      "$id": "#/properties/样式",
+      "type": "array",
+      "title": "The 样式 Schema",
+      "items": {
+        "$id": "#/properties/样式/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "名称",
+          "英文字体",
+          "中文字体",
+          "字体大小",
+          "对齐方式",
+          "录入大纲",
+          "大纲等级",
+          "加粗",
+          "斜体",
+          "下划线",
+          "删除线",
+          "首行缩进",
+          "段前分页",
+          "段前后空行"
+        ],
+        "properties": {
+          "名称": {
+            "$id": "#/properties/样式/items/properties/名称",
+            "type": "string",
+            "title": "The 名称 Schema",
+            "default": "",
+            "examples": [
+              "heading 1"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "英文字体": {
+            "$id": "#/properties/样式/items/properties/英文字体",
+            "type": "string",
+            "title": "The 英文字体 Schema",
+            "default": "",
+            "examples": [
+              "Times New Roman"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "中文字体": {
+            "$id": "#/properties/样式/items/properties/中文字体",
+            "type": "string",
+            "title": "The 中文字体 Schema",
+            "default": "",
+            "examples": [
+              "黑体"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "字体大小": {
+            "$id": "#/properties/样式/items/properties/字体大小",
+            "type": "string",
+            "title": "The 字体大小 Schema",
+            "default": "",
+            "examples": [
+              "三号"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "对齐方式": {
+            "$id": "#/properties/样式/items/properties/对齐方式",
+            "type": "string",
+            "title": "The 对齐方式 Schema",
+            "default": "",
+            "examples": [
+              "居中"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "录入大纲": {
+            "$id": "#/properties/样式/items/properties/录入大纲",
+            "type": "boolean",
+            "title": "The 录入大纲 Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "大纲等级": {
+            "$id": "#/properties/样式/items/properties/大纲等级",
+            "type": "integer",
+            "title": "The 大纲等级 Schema",
+            "default": 0,
+            "examples": [
+              0
+            ]
+          },
+          "加粗": {
+            "$id": "#/properties/样式/items/properties/加粗",
+            "type": "boolean",
+            "title": "The 加粗 Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "斜体": {
+            "$id": "#/properties/样式/items/properties/斜体",
+            "type": "boolean",
+            "title": "The 斜体 Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "下划线": {
+            "$id": "#/properties/样式/items/properties/下划线",
+            "type": "boolean",
+            "title": "The 下划线 Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "删除线": {
+            "$id": "#/properties/样式/items/properties/删除线",
+            "type": "boolean",
+            "title": "The 删除线 Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "首行缩进": {
+            "$id": "#/properties/样式/items/properties/首行缩进",
+            "type": "number",
+            "title": "The 首行缩进 Schema",
+            "default": 0,
+            "examples": [
+              2
+            ]
+          },
+          "段前分页": {
+            "$id": "#/properties/样式/items/properties/段前分页",
+            "type": "boolean",
+            "title": "The 段前分页 Schema",
+            "default": false,
+            "examples": [
+              true
+            ]
+          },
+          "段前后空行": {
+            "$id": "#/properties/样式/items/properties/段前后空行",
+            "type": "number",
+            "title": "The 段前后空行 Schema",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "行距": {
+            "$id": "#/properties/样式/items/properties/行距",
+            "type": "number",
+            "title": "The 行距 Schema",
+            "default": 0,
+            "examples": [
+              1.5
+            ]
+          }
+        }
+      }
+    },
+    "对应关系": {
+      "$id": "#/properties/对应关系",
+      "type": "object",
+      "title": "The 对应关系 Schema",
+      "required": [
+        "正文",
+        "一级标题",
+        "二级标题",
+        "三级标题",
+        "代码段",
+        "引用"
+      ],
+      "properties": {
+        "正文": {
+          "$id": "#/properties/对应关系/properties/正文",
+          "type": "string",
+          "title": "The 正文 Schema",
+          "default": "",
+          "examples": [
+            "BodyText"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "一级标题": {
+          "$id": "#/properties/对应关系/properties/一级标题",
+          "type": "string",
+          "title": "The 一级标题 Schema",
+          "default": "",
+          "examples": [
+            "heading 1"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "二级标题": {
+          "$id": "#/properties/对应关系/properties/二级标题",
+          "type": "string",
+          "title": "The 二级标题 Schema",
+          "default": "",
+          "examples": [
+            "heading 2"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "三级标题": {
+          "$id": "#/properties/对应关系/properties/三级标题",
+          "type": "string",
+          "title": "The 三级标题 Schema",
+          "default": "",
+          "examples": [
+            "heading 3"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "代码段": {
+          "$id": "#/properties/对应关系/properties/代码段",
+          "type": "string",
+          "title": "The 代码段 Schema",
+          "default": "",
+          "examples": [
+            "Code"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "引用": {
+          "$id": "#/properties/对应关系/properties/引用",
+          "type": "string",
+          "title": "The 引用 Schema",
+          "default": "",
+          "examples": [
+            "reference"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "可选部分": {
+      "$id": "#/properties/可选部分",
+      "type": "object",
+      "title": "The 可选部分 Schema",
+      "required": [
+        "封面",
+        "摘要",
+        "目录",
+        "页眉",
+        "页脚",
+        "结束语",
+        "延迟样式"
+      ],
+      "properties": {
+        "封面": {
+          "$id": "#/properties/可选部分/properties/封面",
+          "type": "boolean",
+          "title": "The 封面 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "摘要": {
+          "$id": "#/properties/可选部分/properties/摘要",
+          "type": "boolean",
+          "title": "The 摘要 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "目录": {
+          "$id": "#/properties/可选部分/properties/目录",
+          "type": "boolean",
+          "title": "The 目录 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "页眉": {
+          "$id": "#/properties/可选部分/properties/页眉",
+          "type": "boolean",
+          "title": "The 页眉 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "页脚": {
+          "$id": "#/properties/可选部分/properties/页脚",
+          "type": "boolean",
+          "title": "The 页脚 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "结束语": {
+          "$id": "#/properties/可选部分/properties/结束语",
+          "type": "boolean",
+          "title": "The 结束语 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "延迟样式": {
+          "$id": "#/properties/可选部分/properties/延迟样式",
+          "type": "boolean",
+          "title": "The 延迟样式 Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        }
+      }
+    }
+  }
+}
