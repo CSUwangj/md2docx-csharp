@@ -787,7 +787,7 @@ namespace md2docx
 
             return latentStyles;
         }
-        
+
         public static void GenerateCover(ref Body docBody, Dictionary<string, string> info)
         {
             Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = "003672AC", RsidParagraphProperties = "003672AC", RsidRunAdditionDefault = "003672AC", ParagraphId = "71725C42", TextId = "77777777" };
@@ -1687,7 +1687,7 @@ namespace md2docx
 
             paragraphMarkRunProperties21.Append(runFonts27);
             paragraphMarkRunProperties21.Append(fontSize38);
-            paragraphMarkRunProperties21.Append(fontSizeComplexScript27);
+
 
             paragraphProperties21.Append(adjustRightIndent9);
             paragraphProperties21.Append(snapToGrid9);
@@ -1897,6 +1897,177 @@ namespace md2docx
             docBody.Append(paragraph26);
             docBody.Append(paragraph27);
         }
+
+        public static void GenerateTOC(ref Body docBody)
+        {
+            Paragraph para = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Abstract Title" },
+                    PageBreakBefore = new PageBreakBefore()
+                }
+            };
+            Run run = new Run
+            {
+                RunProperties = new RunProperties()
+            };
+            Text txt = new Text { Text = "目录" };
+            run.Append(txt);
+            para.Append(run);
+            docBody.Append(para);
+
+            SdtBlock sdtBlock1 = new SdtBlock();
+
+            SdtProperties sdtProperties1 = new SdtProperties();
+
+            RunProperties runProperties1 = new RunProperties();
+            Languages languages1 = new Languages() { Val = "zh-CN" };
+
+            runProperties1.Append(languages1);
+            SdtId sdtId1 = new SdtId() { Val = 504253948 };
+
+            SdtContentDocPartObject sdtContentDocPartObject1 = new SdtContentDocPartObject();
+            DocPartGallery docPartGallery1 = new DocPartGallery() { Val = "Table of Contents" };
+            DocPartUnique docPartUnique1 = new DocPartUnique();
+
+            sdtContentDocPartObject1.Append(docPartGallery1);
+            sdtContentDocPartObject1.Append(docPartUnique1);
+
+            sdtProperties1.Append(runProperties1);
+            sdtProperties1.Append(sdtId1);
+            sdtProperties1.Append(sdtContentDocPartObject1);
+
+            SdtEndCharProperties sdtEndCharProperties1 = new SdtEndCharProperties();
+
+            RunProperties runProperties2 = new RunProperties();
+            RunFonts runFonts1 = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "宋体", ComplexScript = "Times New Roman" };
+            Bold bold1 = new Bold();
+            BoldComplexScript boldComplexScript1 = new BoldComplexScript();
+            Color color1 = new Color() { Val = "auto" };
+            Kern kern1 = new Kern() { Val = (UInt32Value)2U };
+            FontSize fontSize1 = new FontSize() { Val = "24" };
+            FontSizeComplexScript fontSizeComplexScript1 = new FontSizeComplexScript() { Val = "24" };
+
+            runProperties2.Append(runFonts1);
+            runProperties2.Append(bold1);
+            runProperties2.Append(boldComplexScript1);
+            runProperties2.Append(color1);
+            runProperties2.Append(kern1);
+            runProperties2.Append(fontSize1);
+            runProperties2.Append(fontSizeComplexScript1);
+
+            sdtEndCharProperties1.Append(runProperties2);
+
+            SdtContentBlock sdtContentBlock1 = new SdtContentBlock();
+
+            Paragraph paragraph3 = new Paragraph() { RsidParagraphAddition = "003863DC", RsidRunAdditionDefault = "003863DC", ParagraphId = "233F4095", TextId = "52301D4D" };
+
+            SimpleField simpleField1 = new SimpleField() { Instruction = " TOC \\o \"1-3\" \\h \\z \\u " };
+
+            Run run4 = new Run();
+
+            RunProperties runProperties5 = new RunProperties
+            {
+                FontSize = new FontSize { Val = "24" },
+                FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
+            };
+            RunFonts runFonts2 = new RunFonts() { Hint = FontTypeHintValues.EastAsia };
+            Bold bold2 = new Bold();
+            BoldComplexScript boldComplexScript2 = new BoldComplexScript();
+            NoProof noProof1 = new NoProof();
+
+            runProperties5.Append(runFonts2);
+            runProperties5.Append(bold2);
+            runProperties5.Append(boldComplexScript2);
+            runProperties5.Append(noProof1);
+            Text text3 = new Text();
+            text3.Text = "请手动点击<更新目录>按钮更新目录";
+
+            run4.Append(runProperties5);
+            run4.Append(text3);
+
+            simpleField1.Append(run4);
+
+            paragraph3.Append(simpleField1);
+
+            sdtContentBlock1.Append(paragraph3);
+
+            sdtBlock1.Append(sdtProperties1);
+            sdtBlock1.Append(sdtEndCharProperties1);
+            sdtBlock1.Append(sdtContentBlock1);
+
+            docBody.Append(sdtBlock1);
+        }
+        
+        public static void GenerateFontTablePartContent(FontTablePart fontTablePart1)
+        {
+            Fonts fonts1 = new Fonts() { MCAttributes = new MarkupCompatibilityAttributes() };
+
+            Font font1 = new Font() { Name = "Times New Roman" };
+            Panose1Number panose1Number1 = new Panose1Number() { Val = "02020603050405020304" };
+            FontCharSet fontCharSet1 = new FontCharSet() { Val = "00" };
+            FontFamily fontFamily1 = new FontFamily() { Val = FontFamilyValues.Roman };
+            Pitch pitch1 = new Pitch() { Val = FontPitchValues.Variable };
+            FontSignature fontSignature1 = new FontSignature() { UnicodeSignature0 = "E0002AFF", UnicodeSignature1 = "C0007843", UnicodeSignature2 = "00000009", UnicodeSignature3 = "00000000", CodePageSignature0 = "000001FF", CodePageSignature1 = "00000000" };
+
+            font1.Append(panose1Number1);
+            font1.Append(fontCharSet1);
+            font1.Append(fontFamily1);
+            font1.Append(pitch1);
+            font1.Append(fontSignature1);
+
+            Font font2 = new Font() { Name = "宋体" };
+            AltName altName1 = new AltName() { Val = "SimSun" };
+            Panose1Number panose1Number2 = new Panose1Number() { Val = "02010600030101010101" };
+            FontCharSet fontCharSet2 = new FontCharSet() { Val = "86" };
+            FontFamily fontFamily2 = new FontFamily() { Val = FontFamilyValues.Auto };
+            Pitch pitch2 = new Pitch() { Val = FontPitchValues.Variable };
+            FontSignature fontSignature2 = new FontSignature() { UnicodeSignature0 = "00000003", UnicodeSignature1 = "288F0000", UnicodeSignature2 = "00000016", UnicodeSignature3 = "00000000", CodePageSignature0 = "00040001", CodePageSignature1 = "00000000" };
+
+            font2.Append(altName1);
+            font2.Append(panose1Number2);
+            font2.Append(fontCharSet2);
+            font2.Append(fontFamily2);
+            font2.Append(pitch2);
+            font2.Append(fontSignature2);
+
+            Font font3 = new Font() { Name = "等线 Light" };
+            Panose1Number panose1Number3 = new Panose1Number() { Val = "02010600030101010101" };
+            FontCharSet fontCharSet3 = new FontCharSet() { Val = "86" };
+            FontFamily fontFamily3 = new FontFamily() { Val = FontFamilyValues.Auto };
+            Pitch pitch3 = new Pitch() { Val = FontPitchValues.Variable };
+            FontSignature fontSignature3 = new FontSignature() { UnicodeSignature0 = "A00002BF", UnicodeSignature1 = "38CF7CFA", UnicodeSignature2 = "00000016", UnicodeSignature3 = "00000000", CodePageSignature0 = "0004000F", CodePageSignature1 = "00000000" };
+
+            font3.Append(panose1Number3);
+            font3.Append(fontCharSet3);
+            font3.Append(fontFamily3);
+            font3.Append(pitch3);
+            font3.Append(fontSignature3);
+
+            Font font4 = new Font() { Name = "黑体" };
+            AltName altName2 = new AltName() { Val = "SimHei" };
+            Panose1Number panose1Number4 = new Panose1Number() { Val = "02010609060101010101" };
+            FontCharSet fontCharSet4 = new FontCharSet() { Val = "86" };
+            FontFamily fontFamily4 = new FontFamily() { Val = FontFamilyValues.Modern };
+            Pitch pitch4 = new Pitch() { Val = FontPitchValues.Fixed };
+            FontSignature fontSignature4 = new FontSignature() { UnicodeSignature0 = "800002BF", UnicodeSignature1 = "38CF7CFA", UnicodeSignature2 = "00000016", UnicodeSignature3 = "00000000", CodePageSignature0 = "00040001", CodePageSignature1 = "00000000" };
+
+            font4.Append(altName2);
+            font4.Append(panose1Number4);
+            font4.Append(fontCharSet4);
+            font4.Append(fontFamily4);
+            font4.Append(pitch4);
+            font4.Append(fontSignature4);
+
+            fonts1.Append(font1);
+            fonts1.Append(font2);
+            fonts1.Append(font3);
+            fonts1.Append(font4);
+
+            fontTablePart1.Fonts = fonts1;
+        }
+
 
     }
 }

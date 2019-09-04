@@ -10,6 +10,11 @@ namespace md2docx
 {
     public class StyleFactory
     {
+        /// <summary>
+        /// Generate Style from JObject
+        /// </summary>
+        /// <param name="jObject">config json</param>
+        /// <returns>correnspended style</returns>
         public Style GenerateStyle(JObject jObject)
         {
             string size;
