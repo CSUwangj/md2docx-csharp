@@ -28,6 +28,9 @@ namespace md2docx
         static string e_kew = "";
         static string endnote = "";
         static string filename = "";
+        static string mdPath = "input.md";
+        static string filePath = "";
+        static string configPath = "config.json";
 
         private static void Usage()
         {
@@ -40,9 +43,6 @@ output      -> <id><name><filename>.docx");
 
         private static void Main(string[] args)
         {
-            string mdPath = "input.md";
-            string filePath = "";
-            string configPath = "config.json";
 
             if (args.Length < 2)
             {
@@ -66,33 +66,7 @@ output      -> <id><name><filename>.docx");
             {
                 if (element is YamlHeaderBlock yaml)
                 {
-                    name = yaml.Children["name"];
-                    id = yaml.Children["id"];
-                    teacher = yaml.Children["teacher"];
-                    department = yaml.Children["department"];
-                    filename = yaml.Children["filename"];
-                    clas = yaml.Children["class"];
-                    if (filePath == "")
-                    {
-                        filePath = id + name + filename + ".docx";
-                    }
-
-                    if (yaml.Children.ContainsKey("e_abs"))
-                    {
-                        c_abs = yaml.Children["c_abs"];
-                        c_kew = yaml.Children["c_kew"];
-                        c_title = yaml.Children["c_title"];
-                    }
-                    if (yaml.Children.ContainsKey("e_abs"))
-                    {
-                        e_abs = yaml.Children["e_abs"];
-                        e_kew = yaml.Children["e_kew"];
-                        e_title = yaml.Children["e_title"];
-                    }
-                    if (yaml.Children.ContainsKey("end"))
-                    {
-                        endnote = yaml.Children["end"];
-                    }
+                    ParseYAMLHeader(yaml);
                 }
             }
 
@@ -111,6 +85,37 @@ output      -> <id><name><filename>.docx");
             }
         }
 
+        private static void ParseYAMLHeader(YamlHeaderBlock yaml)
+        {
+            name = yaml.Children["name"];
+            id = yaml.Children["id"];
+            teacher = yaml.Children["teacher"];
+            department = yaml.Children["department"];
+            filename = yaml.Children["filename"];
+            clas = yaml.Children["class"];
+            if (filePath == "")
+            {
+                filePath = id + name + filename + ".docx";
+            }
+
+            if (yaml.Children.ContainsKey("e_abs"))
+            {
+                c_abs = yaml.Children["c_abs"];
+                c_kew = yaml.Children["c_kew"];
+                c_title = yaml.Children["c_title"];
+            }
+            if (yaml.Children.ContainsKey("e_abs"))
+            {
+                e_abs = yaml.Children["e_abs"];
+                e_kew = yaml.Children["e_kew"];
+                e_title = yaml.Children["e_title"];
+            }
+            if (yaml.Children.ContainsKey("end"))
+            {
+                endnote = yaml.Children["end"];
+            }
+        }
+
         // Generates content of mainDocumentPart1.
         private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document, JObject correspondecs, JObject optionalParts)
         {
@@ -118,11 +123,12 @@ output      -> <id><name><filename>.docx");
 
             Body docBody = new Body();
 
-            bool genEnd = false;
-
-            ImagePart imagePart1 = mainDocumentPart1.AddNewPart<ImagePart>("image/jpeg", "rId8");
-            GenerateImagePart1Content(imagePart1);
-            GenerateCover(ref docBody);
+            if ((bool)optionalParts["封面"])
+            {
+                ImagePart imagePart1 = mainDocumentPart1.AddNewPart<ImagePart>("image/jpeg", "rId8");
+                GenerateImagePart1Content(imagePart1);
+                GenerateCover(ref docBody);
+            }
             
             if (c_title != "")
             {
@@ -1562,7 +1568,7 @@ output      -> <id><name><filename>.docx");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract" }
+                    ParagraphStyleId = new ParagraphStyleId() { Val = "Abstract Title" }
                 }
             };
             Run run = new Run { RunProperties = new RunProperties() };
@@ -1581,7 +1587,7 @@ output      -> <id><name><filename>.docx");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = "Abs" }
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Abstract Subtitle" }
                 }
             };
             run = new Run
