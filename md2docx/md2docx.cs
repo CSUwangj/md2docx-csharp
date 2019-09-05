@@ -105,12 +105,12 @@ output      -> <id><name><filename>.docx");
             
             if ((bool)optionalParts["摘要"] && info.ContainsKey("c_title"))
             {
-                Add_abstract(info["c_title"], info["c_abs"], info["c_kew"], true, ref docBody);
+                AddAbstract(info["c_title"], info["c_abs"], info["c_kew"], true, ref docBody);
             }
 
             if ((bool)optionalParts["摘要"] && info.ContainsKey("e_title"))
             {
-                Add_abstract(info["e_title"], info["e_abs"], info["e_kew"], false, ref docBody);
+                AddAbstract(info["e_title"], info["e_abs"], info["e_kew"], false, ref docBody);
             }
 
             GeneratedCode.GenerateTOC(ref docBody);
@@ -127,7 +127,7 @@ output      -> <id><name><filename>.docx");
                             ParagraphStyleId = new ParagraphStyleId { Val = "bodytext" }
                         }
                     };
-                    Deal_md_inline(new RunProperties(), mpara.Inlines, ref docPara);
+                    DealMDInlines(new RunProperties(), mpara.Inlines, ref docPara);
                     docBody.Append(docPara);
                 }else if (element is HeaderBlock mhead)
                 {
@@ -140,14 +140,14 @@ output      -> <id><name><filename>.docx");
                         default:
                             throw new Exception($"Rendering {element.GetType()} not implement yet");
                     }
-                    Deal_md_inline(new RunProperties(), mhead.Inlines, ref docPara);
+                    DealMDInlines(new RunProperties(), mhead.Inlines, ref docPara);
                     docBody.Append(docPara);
                 }
                 else if (element is QuoteBlock refer)
                 {
                     foreach (var e in refer.Blocks)
                     {
-                        Deal_quote_refer(e, ref docBody);
+                        DealQuoteRefer(e, ref docBody);
                     }
                 }
                 else if(!(element is YamlHeaderBlock))
@@ -191,7 +191,7 @@ output      -> <id><name><filename>.docx");
         /// <param name="rp">Current Run Properties, because special style may be nesting so we need keep it</param>
         /// <param name="inline">Current Inline element</param>
         /// <param name="docPara">In which we append out text</param>
-        private static void Deal_md_inline(RunProperties rp, IList<MarkdownInline> inlines, ref Paragraph docPara)
+        private static void DealMDInlines(RunProperties rp, IList<MarkdownInline> inlines, ref Paragraph docPara)
         {
             foreach(MarkdownInline inline in inlines)
             {
@@ -219,28 +219,28 @@ output      -> <id><name><filename>.docx");
                         RunProperties newbrp = (RunProperties)rp.Clone();
                         newbrp.Bold = new Bold();
                         newbrp.BoldComplexScript = new BoldComplexScript();
-                        Deal_md_inline(newbrp, bd.Inlines, ref docPara);
+                        DealMDInlines(newbrp, bd.Inlines, ref docPara);
                         break;
                     case ItalicTextInline it:
                         RunProperties newirp = (RunProperties)rp.Clone();
                         newirp.Italic = new Italic();
                         newirp.ItalicComplexScript = new ItalicComplexScript();
-                        Deal_md_inline(newirp, it.Inlines, ref docPara);
+                        DealMDInlines(newirp, it.Inlines, ref docPara);
                         break;
                     case StrikethroughTextInline st:
                         RunProperties newstrp = (RunProperties)rp.Clone();
                         newstrp.Strike = new Strike();
-                        Deal_md_inline(newstrp, st.Inlines, ref docPara);
+                        DealMDInlines(newstrp, st.Inlines, ref docPara);
                         break;
                     case SubscriptTextInline sb:
                         RunProperties newsbrp = (RunProperties)rp.Clone();
                         newsbrp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Subscript };
-                        Deal_md_inline(newsbrp, sb.Inlines, ref docPara);
+                        DealMDInlines(newsbrp, sb.Inlines, ref docPara);
                         break;
                     case SuperscriptTextInline sp:
                         RunProperties newsprp = (RunProperties)rp.Clone();
                         newsprp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Superscript };
-                        Deal_md_inline(newsprp, sp.Inlines, ref docPara);
+                        DealMDInlines(newsprp, sp.Inlines, ref docPara);
                         break;
                     default:
                         Console.WriteLine(inline.ToString());
@@ -254,7 +254,7 @@ output      -> <id><name><filename>.docx");
         /// </summary>
         /// <param name="block">Paragraph block, when block is not paragraph block, it throw a exception</param>
         /// <param name="docBody">In which we append our text</param>
-        private static void Deal_quote_refer(MarkdownBlock block, ref Body docBody)
+        private static void DealQuoteRefer(MarkdownBlock block, ref Body docBody)
         {
             if (!(block is ParagraphBlock))
             {
@@ -289,7 +289,7 @@ output      -> <id><name><filename>.docx");
         /// <param name="keyWords">Key words</param>
         /// <param name="isCN">If it's Chinese abstract</param>
         /// <param name="docBody">In which we append our text</param>
-        private static void Add_abstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
+        private static void AddAbstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
         {
             string subtitle = isCN ? "摘要" : "ABSTRACT";
             string keyWT = isCN ? "关键词：" : "Key words: ";

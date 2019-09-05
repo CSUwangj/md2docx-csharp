@@ -28,18 +28,20 @@
 
 见[specification](./docs/spec.md)
 
-## 文档
+## 配置文件
 
-TBD
+schema文件为[schema](./docs/schema.json)，示例文件为[default config](./examples/config.json)。
+
+## 文档
 
 在我的[博客](https://csuwangj.github.io/%E7%BC%96%E7%A8%8B%E6%98%AF%E5%BE%88%E5%A5%BD%E7%8E%A9%E7%9A%84-md2docx%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%87%BA%E6%9D%A5%E7%9A%84/)中对写这个程序的过程做了一个简介，同时总结了一下用到的资料，暂且先用它吧。
 
 ## TODO
 
 - [x] 加入测试（并重构）
+- [x] 将格式等设置改为配置文件而非硬编码
 - [ ] 部署CI
 - [ ] 将parser更换成一个标准更接近GFM的parser
-- [x] 将格式等设置改为配置文件而非硬编码
 - [ ] 页眉
 - [ ] 页脚
 - [ ] 图片
