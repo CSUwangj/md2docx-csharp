@@ -1,8 +1,11 @@
-# md2docx-csharp
+# md2docx-csharp[![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/project/CSUwangj/md2docx-csharp/branch/master)
 
+---
 使用C#开发的将markdown转换为docx的工具。
 
 该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前1.0版已经完工，下一步动向见TODO。
+
+下载: [latest release](https://github.com/CSUwangj/md2docx-csharp/releases) | [latest CI build (master)](https://ci.appveyor.com/api/projects/CSUwangj/md2docx-csharp/artifacts/md2docx/bin/md2docx.zip)(文档未完成)
 
 ## 快速开始
 
