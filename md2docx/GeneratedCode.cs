@@ -2068,6 +2068,5 @@ namespace md2docx
             fontTablePart1.Fonts = fonts1;
         }
 
-
     }
 }

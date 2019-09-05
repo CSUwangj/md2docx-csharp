@@ -1,4 +1,4 @@
-using Xunit.Abstractions;
+ï»¿using Xunit.Abstractions;
 using System.Collections.Generic;
 using Xunit;
 using md2docx;
@@ -40,21 +40,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'heading 1',
-                  'Ó¢ÎÄ×ÖÌå': 'Times New Roman',
-                  'ÖĞÎÄ×ÖÌå': 'ºÚÌå',
-                  '×ÖÌå´óĞ¡': 'ÈıºÅ',
-                  '¶ÔÆë·½Ê½': '¾ÓÖĞ',
-                  'Â¼Èë´ó¸Ù': true,
-                  '´ó¸ÙµÈ¼¶': 0,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 0,
-                  '¶ÎÇ°·ÖÒ³': true,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 1,
-                  'ĞĞ¾à': 0
+                  'åç§°': 'heading 1',
+                  'è‹±æ–‡å­—ä½“': 'Times New Roman',
+                  'ä¸­æ–‡å­—ä½“': 'é»‘ä½“',
+                  'å­—ä½“å¤§å°': 'ä¸‰å·',
+                  'å¯¹é½æ–¹å¼': 'å±…ä¸­',
+                  'å½•å…¥å¤§çº²': true,
+                  'å¤§çº²ç­‰çº§': 0,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 0,
+                  'æ®µå‰åˆ†é¡µ': true,
+                  'æ®µå‰åç©ºè¡Œ': 1,
+                  'è¡Œè·': 0
                 }",
                 new Style
                 {
@@ -70,7 +70,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "ºÚÌå", ComplexScript = "Times New Roman" },
+                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "é»‘ä½“", ComplexScript = "Times New Roman" },
                         FontSize = new FontSize {  Val = "32" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "32" }
                     }
@@ -79,21 +79,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'heading 2',
-                  'Ó¢ÎÄ×ÖÌå': 'Times New Roman',
-                  'ÖĞÎÄ×ÖÌå': 'ºÚÌå',
-                  '×ÖÌå´óĞ¡': 'Ğ¡ËÄ',
-                  '¶ÔÆë·½Ê½': '×ó¶ÔÆë',
-                  'Â¼Èë´ó¸Ù': true,
-                  '´ó¸ÙµÈ¼¶': 1,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 2,
-                  '¶ÎÇ°·ÖÒ³': false,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 0,
-                  'ĞĞ¾à': 0
+                  'åç§°': 'heading 2',
+                  'è‹±æ–‡å­—ä½“': 'Times New Roman',
+                  'ä¸­æ–‡å­—ä½“': 'é»‘ä½“',
+                  'å­—ä½“å¤§å°': 'å°å››',
+                  'å¯¹é½æ–¹å¼': 'å·¦å¯¹é½',
+                  'å½•å…¥å¤§çº²': true,
+                  'å¤§çº²ç­‰çº§': 1,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 2,
+                  'æ®µå‰åˆ†é¡µ': false,
+                  'æ®µå‰åç©ºè¡Œ': 0,
+                  'è¡Œè·': 0
                 }",
                 new Style
                 {
@@ -108,7 +108,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "ºÚÌå", ComplexScript = "Times New Roman" },
+                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "é»‘ä½“", ComplexScript = "Times New Roman" },
                         FontSize = new FontSize {  Val = "24" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
                     }
@@ -117,21 +117,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'heading 3',
-                  'Ó¢ÎÄ×ÖÌå': 'Times New Roman',
-                  'ÖĞÎÄ×ÖÌå': '¿¬Ìå',
-                  '×ÖÌå´óĞ¡': 'Ğ¡ËÄ',
-                  '¶ÔÆë·½Ê½': '×ó¶ÔÆë',
-                  'Â¼Èë´ó¸Ù': true,
-                  '´ó¸ÙµÈ¼¶': 2,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 2,
-                  '¶ÎÇ°·ÖÒ³': false,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 0,
-                  'ĞĞ¾à': 0
+                  'åç§°': 'heading 3',
+                  'è‹±æ–‡å­—ä½“': 'Times New Roman',
+                  'ä¸­æ–‡å­—ä½“': 'æ¥·ä½“',
+                  'å­—ä½“å¤§å°': 'å°å››',
+                  'å¯¹é½æ–¹å¼': 'å·¦å¯¹é½',
+                  'å½•å…¥å¤§çº²': true,
+                  'å¤§çº²ç­‰çº§': 2,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 2,
+                  'æ®µå‰åˆ†é¡µ': false,
+                  'æ®µå‰åç©ºè¡Œ': 0,
+                  'è¡Œè·': 0
                 }",
                 new Style
                 {
@@ -146,7 +146,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "¿¬Ìå", ComplexScript = "Times New Roman" },
+                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "æ¥·ä½“", ComplexScript = "Times New Roman" },
                         FontSize = new FontSize {  Val = "24" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
                     }
@@ -155,21 +155,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'bodytext',
-                  'Ó¢ÎÄ×ÖÌå': 'Times New Roman',
-                  'ÖĞÎÄ×ÖÌå': 'ËÎÌå',
-                  '×ÖÌå´óĞ¡': 'Ğ¡ËÄ',
-                  '¶ÔÆë·½Ê½': '×ó¶ÔÆë',
-                  'Â¼Èë´ó¸Ù': false,
-                  '´ó¸ÙµÈ¼¶': 0,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 2,
-                  '¶ÎÇ°·ÖÒ³': false,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 0,
-                  'ĞĞ¾à': 1.5
+                  'åç§°': 'bodytext',
+                  'è‹±æ–‡å­—ä½“': 'Times New Roman',
+                  'ä¸­æ–‡å­—ä½“': 'å®‹ä½“',
+                  'å­—ä½“å¤§å°': 'å°å››',
+                  'å¯¹é½æ–¹å¼': 'å·¦å¯¹é½',
+                  'å½•å…¥å¤§çº²': false,
+                  'å¤§çº²ç­‰çº§': 0,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 2,
+                  'æ®µå‰åˆ†é¡µ': false,
+                  'æ®µå‰åç©ºè¡Œ': 0,
+                  'è¡Œè·': 1.5
                 }",
                 new Style
                 {
@@ -184,7 +184,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "ËÎÌå", ComplexScript = "Times New Roman" },
+                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "å®‹ä½“", ComplexScript = "Times New Roman" },
                         FontSize = new FontSize {  Val = "24" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
                     }
@@ -193,21 +193,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'code',
-                  'Ó¢ÎÄ×ÖÌå': 'Consolas',
-                  'ÖĞÎÄ×ÖÌå': 'ºÚÌå',
-                  '×ÖÌå´óĞ¡': 'Ğ¡ËÄ',
-                  '¶ÔÆë·½Ê½': '×ó¶ÔÆë',
-                  'Â¼Èë´ó¸Ù': false,
-                  '´ó¸ÙµÈ¼¶': 0,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 0,
-                  '¶ÎÇ°·ÖÒ³': false,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 0,
-                  'ĞĞ¾à': 0
+                  'åç§°': 'code',
+                  'è‹±æ–‡å­—ä½“': 'Consolas',
+                  'ä¸­æ–‡å­—ä½“': 'é»‘ä½“',
+                  'å­—ä½“å¤§å°': 'å°å››',
+                  'å¯¹é½æ–¹å¼': 'å·¦å¯¹é½',
+                  'å½•å…¥å¤§çº²': false,
+                  'å¤§çº²ç­‰çº§': 0,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 0,
+                  'æ®µå‰åˆ†é¡µ': false,
+                  'æ®µå‰åç©ºè¡Œ': 0,
+                  'è¡Œè·': 0
                 }",
                 new Style
                 {
@@ -220,7 +220,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Consolas", HighAnsi = "Consolas", EastAsia = "ºÚÌå", ComplexScript = "Consolas" },
+                        RunFonts = new RunFonts() { Ascii = "Consolas", HighAnsi = "Consolas", EastAsia = "é»‘ä½“", ComplexScript = "Consolas" },
                         FontSize = new FontSize {  Val = "24" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "24" }
                     }
@@ -229,21 +229,21 @@ namespace md2docxTests
             new object[]
             {
                 @"{
-                  'Ãû³Æ': 'reference',
-                  'Ó¢ÎÄ×ÖÌå': 'Times New Roman',
-                  'ÖĞÎÄ×ÖÌå': 'ºÚÌå',
-                  '×ÖÌå´óĞ¡': 'ÎåºÅ',
-                  '¶ÔÆë·½Ê½': '×ó¶ÔÆë',
-                  'Â¼Èë´ó¸Ù': false,
-                  '´ó¸ÙµÈ¼¶': 0,
-                  '¼Ó´Ö': false,
-                  'Ğ±Ìå': false,
-                  'ÏÂ»®Ïß': false,
-                  'É¾³ıÏß': false,
-                  'Ê×ĞĞËõ½ø': 0,
-                  '¶ÎÇ°·ÖÒ³': false,
-                  '¶ÎÇ°ºó¿ÕĞĞ': 0,
-                  'ĞĞ¾à': 1.5
+                  'åç§°': 'reference',
+                  'è‹±æ–‡å­—ä½“': 'Times New Roman',
+                  'ä¸­æ–‡å­—ä½“': 'é»‘ä½“',
+                  'å­—ä½“å¤§å°': 'äº”å·',
+                  'å¯¹é½æ–¹å¼': 'å·¦å¯¹é½',
+                  'å½•å…¥å¤§çº²': false,
+                  'å¤§çº²ç­‰çº§': 0,
+                  'åŠ ç²—': false,
+                  'æ–œä½“': false,
+                  'ä¸‹åˆ’çº¿': false,
+                  'åˆ é™¤çº¿': false,
+                  'é¦–è¡Œç¼©è¿›': 0,
+                  'æ®µå‰åˆ†é¡µ': false,
+                  'æ®µå‰åç©ºè¡Œ': 0,
+                  'è¡Œè·': 1.5
                 }",
                 new Style
                 {
@@ -257,7 +257,7 @@ namespace md2docxTests
                     },
                     StyleRunProperties = new StyleRunProperties
                     {
-                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "ºÚÌå", ComplexScript = "Times New Roman" },
+                        RunFonts = new RunFonts() { Ascii = "Times New Roman", HighAnsi = "Times New Roman", EastAsia = "é»‘ä½“", ComplexScript = "Times New Roman" },
                         FontSize = new FontSize {  Val = "21" },
                         FontSizeComplexScript = new FontSizeComplexScript { Val = "21" }
                     }
