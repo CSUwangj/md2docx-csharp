@@ -1,4 +1,4 @@
-# md2docx-csharp[![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/project/CSUwangj/md2docx-csharp/branch/master)
+# md2docx-csharp[![Build status](https://ci.appveyor.com/api/projects/status/github/CSUwangj/md2docx-csharp?branch=master&svg=true)](https://ci.appveyor.com/project/CSUwangj/md2docx-csharp/branch/master)
 
 ---
 使用C#开发的将markdown转换为docx的工具。
@@ -43,7 +43,7 @@ schema文件为[schema](./docs/schema.json)，示例文件为[default config](./
 
 - [x] 加入测试（并重构）
 - [x] 将格式等设置改为配置文件而非硬编码
-- [ ] 部署CI
+- [x] 部署CI
 - [ ] 将parser更换成一个标准更接近GFM的parser
 - [ ] 页眉
 - [ ] 页脚
