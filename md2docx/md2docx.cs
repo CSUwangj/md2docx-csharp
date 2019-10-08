@@ -10,26 +10,23 @@ using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using NDesk.Options;
 
 namespace md2docx
 {
     class Md2Docx
     {
         static Dictionary<string, string> info = new Dictionary<string, string>();
-        static string mdPath = "input.md";
-        static string filePath = "";
-        static string configPath = "config.json";
 
         /// <summary>
         /// Print usage without exit
         /// </summary>
-        private static void Usage()
+        private static void Usage(OptionSet p)
         {
-            Console.WriteLine(@"Usage: ./md2docx {markdown} {config_json} {output}
-default parameter will be 
-markdown    -> input.md
-config_json -> config.json
-output      -> <id><name><filename>.docx");
+            Console.WriteLine(@"Usage: md2docx [OPTIONS]
+Convert markdown to docx with specified options.
+Opntions:");
+            p.WriteOptionDescriptions(Console.Out);
         }
 
         /// <summary>
@@ -38,19 +35,49 @@ output      -> <id><name><filename>.docx");
         /// <param name="args">{markdown} {config_json} {output}</param>
         private static void Main(string[] args)
         {
-            Usage();
-            if (args.Length > 0)
+            string docPath = "";
+            string mdPath = "input.md";
+            string configPath = "config.json";
+            bool showHelp = false;
+            int useDefault = 3;
+            bool quiet = false;
+            var p = new OptionSet
             {
-                mdPath = args[0];
-            }
-            if (args.Length > 1)
+                {   "i|input=", "the {INPUT} markdown file path. Default value is input.md.",
+                    v => { mdPath = v; useDefault -= 1; } },
+                {   "o|output=", "the {OUTPUT} docx file path. Default value is <id><name><filename>.docx.",
+                    v => { docPath = v; useDefault -= 1; } },
+                {   "c|config=", "the {CONFIG} json path. Default value is config.json.",
+                    v => { configPath = v; useDefault -= 1; } },
+                {   "h|help", "show this message and exit",
+                    v => showHelp = v != null },
+                {   "q|quiet", "ignore missing args message",
+                    v => quiet = v != null }
+            };
+            try
             {
-                configPath = args[1];
+                p.Parse(args);
             }
-            if (args.Length > 2)
+            catch (OptionException e)
             {
-                filePath = args[2];
+                Console.Write("md2docx: ");
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Try`md2docx --help' for more information.");
+                return;
             }
+
+            if (showHelp)
+            {
+                Usage(p);
+                return;
+            }
+
+            if (useDefault != 0 && !quiet)
+            {
+                Console.WriteLine("Some arguments are missing, will use default value for you.");
+                Console.WriteLine("Try`md2docx --help' for more information or use -q stop this message.");
+            }
+
             string md = System.IO.File.ReadAllText(mdPath);
             JObject config = JObject.Parse(System.IO.File.ReadAllText(configPath));
             MarkdownDocument mddoc = new MarkdownDocument();
@@ -62,13 +89,13 @@ output      -> <id><name><filename>.docx");
                 {
                     info = yaml.Children;
                 }
-                if (filePath == "")
+                if (docPath == "")
                 {
-                    filePath = info["id"] + info["name"] + info["filename"] + ".docx";
+                    docPath = info["id"] + info["name"] + info["filename"] + ".docx";
                 }
             }
 
-            using (WordprocessingDocument document = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
+            using (WordprocessingDocument document = WordprocessingDocument.Create(docPath, WordprocessingDocumentType.Document))
             {
                 MainDocumentPart mainDocumentPart1 = document.AddMainDocumentPart();
                 GenerateMainDocumentPart1Content(mainDocumentPart1, mddoc, (JObject)config["对应关系"], (JObject)config["可选部分"]);
