@@ -263,7 +263,6 @@
         "目录",
         "页眉",
         "页脚",
-        "结束语",
         "延迟样式"
       ],
       "properties": {
@@ -307,15 +306,6 @@
           "$id": "#/properties/可选部分/properties/页脚",
           "type": "boolean",
           "title": "The 页脚 Schema",
-          "default": false,
-          "examples": [
-            true
-          ]
-        },
-        "结束语": {
-          "$id": "#/properties/可选部分/properties/结束语",
-          "type": "boolean",
-          "title": "The 结束语 Schema",
           "default": false,
           "examples": [
             true

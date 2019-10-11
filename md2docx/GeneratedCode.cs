@@ -867,7 +867,7 @@ namespace md2docx
             nonVisualPictureProperties1.Append(nonVisualPictureDrawingProperties1);
 
             Pic.BlipFill blipFill1 = new Pic.BlipFill();
-            A.Blip blip1 = new A.Blip() { Embed = "rId8" };
+            A.Blip blip1 = new A.Blip() { Embed = "rId2" };
 
             A.Stretch stretch1 = new A.Stretch();
             A.FillRectangle fillRectangle1 = new A.FillRectangle();
