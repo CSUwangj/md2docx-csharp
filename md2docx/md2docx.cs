@@ -17,6 +17,8 @@ namespace md2docx
     class Md2Docx
     {
         static Dictionary<string, string> info = new Dictionary<string, string>();
+        static Dictionary<string, string> correspondecs;
+        static Dictionary<string, bool> optionalParts;
 
         /// <summary>
         /// Print usage without exit
@@ -80,6 +82,8 @@ Opntions:");
 
             string md = System.IO.File.ReadAllText(mdPath);
             JObject config = JObject.Parse(System.IO.File.ReadAllText(configPath));
+            correspondecs = config["对应关系"].ToObject<Dictionary<string, string>>();
+            optionalParts = config["可选部分"].ToObject<Dictionary<string, bool>>();
             MarkdownDocument mddoc = new MarkdownDocument();
             mddoc.Parse(md);
 
@@ -98,10 +102,10 @@ Opntions:");
             using (WordprocessingDocument document = WordprocessingDocument.Create(docPath, WordprocessingDocumentType.Document))
             {
                 MainDocumentPart mainDocumentPart1 = document.AddMainDocumentPart();
-                GenerateMainDocumentPart1Content(mainDocumentPart1, mddoc, (JObject)config["对应关系"], (JObject)config["可选部分"]);
+                GenerateMainDocumentPart1Content(mainDocumentPart1, mddoc);
               
                 StyleDefinitionsPart styleDefinitionsPart1 = mainDocumentPart1.AddNewPart<StyleDefinitionsPart>("rId1");
-                GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1, (JArray)config["样式"], (bool)config["可选部分"]["延迟样式"]);
+                GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1, (JArray)config["样式"]);
 
                 FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId6");
                 GeneratedCode.GenerateFontTablePartContent(fontTablePart1);
@@ -117,28 +121,28 @@ Opntions:");
         /// <param name="document">word document</param>
         /// <param name="correspondecs">how markdown blocks are mapping to styles</param>
         /// <param name="optionalParts">double check if user need these parts</param>
-        private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document, JObject correspondecs, JObject optionalParts)
+        private static void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, MarkdownDocument document)
         {
             Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() };
 
             Body docBody = new Body();
 
-            if ((bool)optionalParts["封面"])
+            if (optionalParts["封面"])
             {
                 GenerateCoverImage(mainDocumentPart1.AddNewPart<ImagePart>("image/jpeg", "rId2"));
                 GeneratedCode.GenerateCover(ref docBody, Md2Docx.info);
             }
 
-            if ((bool)optionalParts["摘要"] && Md2Docx.info.ContainsKey("c_title"))
+            if (optionalParts["摘要"] && Md2Docx.info.ContainsKey("c_title"))
             {
-                AddAbstract(info["c_title"], info["c_abs"], info["c_kew"], true, ref docBody, ref correspondecs);
+                AddAbstract(info["c_title"], info["c_abs"], info["c_kew"], true, ref docBody);
             }
-            if ((bool)optionalParts["摘要"] && Md2Docx.info.ContainsKey("e_title"))
+            if (optionalParts["摘要"] && Md2Docx.info.ContainsKey("e_title"))
             {
-                AddAbstract(info["e_title"], info["e_abs"], info["e_kew"], false, ref docBody, ref correspondecs);
+                AddAbstract(info["e_title"], info["e_abs"], info["e_kew"], false, ref docBody);
             }
 
-            if ((bool)optionalParts["目录"])
+            if (optionalParts["目录"])
             {
                 GeneratedCode.GenerateTOC(ref docBody);
             }
@@ -146,7 +150,7 @@ Opntions:");
             // rendering body text(paragraph/heading, others are TBD)
             foreach (var block in document.Blocks)
             {
-                DealMarkdownBlock(block, ref docBody, ref correspondecs);
+                DealMarkdownBlock(block, ref docBody);
             }
 
             SectionProperties sectionProperties1 = new SectionProperties();
@@ -247,7 +251,7 @@ Opntions:");
         /// </summary>
         /// <param name="block">Paragraph block, when block is not paragraph block, it throw a exception</param>
         /// <param name="docBody">In which we append our text</param>
-        private static void DealQuoteRefer(MarkdownBlock block, ref Body docBody, ref JObject correspondecs)
+        private static void DealQuoteRefer(MarkdownBlock block, ref Body docBody)
         {
             if (!(block is ParagraphBlock))
             {
@@ -257,7 +261,7 @@ Opntions:");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = (string)correspondecs["引用"] }
+                    ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["引用"] }
                 }
             };
             Run run = new Run
@@ -274,7 +278,7 @@ Opntions:");
             docBody.Append(docPara);
         }
 
-        private static void DealMarkdownBlock(MarkdownBlock block, ref Body docBody, ref JObject correspondecs)
+        private static void DealMarkdownBlock(MarkdownBlock block, ref Body docBody)
         {
 
             if (block is ParagraphBlock mpara)
@@ -283,7 +287,7 @@ Opntions:");
                 {
                     ParagraphProperties = new ParagraphProperties
                     {
-                        ParagraphStyleId = new ParagraphStyleId { Val = (string)correspondecs["正文"] }
+                        ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
                     }
                 };
                 DealMDInlines(new RunProperties(), mpara.Inlines, ref docPara);
@@ -295,7 +299,7 @@ Opntions:");
                 switch (mhead.HeaderLevel)
                 {
                     case int i when i < 10:
-                        docPara.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = (string)correspondecs[ChineseNumber[i]+"级标题"] };
+                        docPara.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = correspondecs[chineseNumber[i] + "级标题"] };
                         break;
                     default:
                         throw new Exception($"Rendering {block.GetType()} not implement yet");
@@ -307,7 +311,7 @@ Opntions:");
             {
                 foreach (var e in refer.Blocks)
                 {
-                    DealQuoteRefer(e, ref docBody, ref correspondecs);
+                    DealQuoteRefer(e, ref docBody);
                 }
             }
             else if (!(block is YamlHeaderBlock))
@@ -323,7 +327,7 @@ Opntions:");
         /// <param name="keyWords">Key words</param>
         /// <param name="isCN">If it's Chinese abstract</param>
         /// <param name="docBody">In which we append our text</param>
-        private static void AddAbstract(string title, string abs, string keyWords, bool isCN, ref Body docBody, ref JObject correspondecs)
+        private static void AddAbstract(string title, string abs, string keyWords, bool isCN, ref Body docBody)
         {
             string subtitle = isCN ? "摘要" : "ABSTRACT";
             string keyWT = isCN ? "关键词：" : "Key words: ";
@@ -366,7 +370,7 @@ Opntions:");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = (string)correspondecs["正文"] }
+                    ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
                 }
             };
             run = new Run { RunProperties = new RunProperties() };
@@ -379,7 +383,7 @@ Opntions:");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = (string)correspondecs["正文"] }
+                    ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
                 }
             };
             run = new Run { RunProperties = new RunProperties() };
@@ -392,7 +396,7 @@ Opntions:");
             {
                 ParagraphProperties = new ParagraphProperties
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = (string)correspondecs["正文"] }
+                    ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
                 }
             };
             run = new Run
@@ -419,7 +423,7 @@ Opntions:");
         /// <param name="styleDefinitionsPart1">Styles object</param>
         /// <param name="styleConfig">Config json object</param>
         /// <param name="latent">If user need latent style</param>
-        private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1, JArray styleConfig, bool latent)
+        private static void GenerateStyleDefinitionsPart1Content(StyleDefinitionsPart styleDefinitionsPart1, JArray styleConfig)
         {
             Styles styles = new Styles() { MCAttributes = new MarkupCompatibilityAttributes() };
 
@@ -441,7 +445,7 @@ Opntions:");
 
             styles.Append(docDefaults);
 
-            if (latent)
+            if (optionalParts["延迟样式"])
             {
                 styles.Append(GeneratedCode.GenerateLatentStyles());
             }
