@@ -187,12 +187,11 @@ Opntions:");
         /// </summary>
         /// <param name="rp">Current Run Properties, because special style may be nesting so we need keep it</param>
         /// <param name="inline">Current Inline element</param>
-        /// <param name="docPara">In which we append out text</param>
-        private static void CovertMDInlines(RunProperties rp, IList<MarkdownInline> inlines, ref Paragraph docPara)
+        /// <param name="paragraph">In which we append out text</param>
+        private static void CovertMDInlines(RunProperties rp, IList<MarkdownInline> inlines, ref Paragraph paragraph,ref List<Paragraph> paragraphs)
         {
             foreach(MarkdownInline inline in inlines)
             {
-
                 switch (inline)
                 {
                     case TextRunInline mtxt:
@@ -201,7 +200,7 @@ Opntions:");
                         Text dtext = new Text { Text = mtxt.Text, Space = SpaceProcessingModeValues.Preserve };
                         trun.Append(newtrp);
                         trun.Append(dtext);
-                        docPara.Append(trun);
+                        paragraph.Append(trun);
                         break;
                     case CodeInline mcode:
                         RunProperties newcrp = (RunProperties)rp.Clone();
@@ -210,34 +209,51 @@ Opntions:");
                         Text dcode = new Text { Text = mcode.Text };
                         crun.Append(newcrp);
                         crun.Append(dcode);
-                        docPara.Append(crun);
+                        paragraph.Append(crun);
                         break;
                     case BoldTextInline bd:
                         RunProperties newbrp = (RunProperties)rp.Clone();
                         newbrp.Bold = new Bold();
                         newbrp.BoldComplexScript = new BoldComplexScript();
-                        CovertMDInlines(newbrp, bd.Inlines, ref docPara);
+                        CovertMDInlines(newbrp, bd.Inlines, ref paragraph, ref paragraphs);
                         break;
                     case ItalicTextInline it:
                         RunProperties newirp = (RunProperties)rp.Clone();
                         newirp.Italic = new Italic();
                         newirp.ItalicComplexScript = new ItalicComplexScript();
-                        CovertMDInlines(newirp, it.Inlines, ref docPara);
+                        CovertMDInlines(newirp, it.Inlines, ref paragraph, ref paragraphs);
                         break;
                     case StrikethroughTextInline st:
                         RunProperties newstrp = (RunProperties)rp.Clone();
                         newstrp.Strike = new Strike();
-                        CovertMDInlines(newstrp, st.Inlines, ref docPara);
+                        CovertMDInlines(newstrp, st.Inlines, ref paragraph, ref paragraphs);
                         break;
                     case SubscriptTextInline sb:
                         RunProperties newsbrp = (RunProperties)rp.Clone();
                         newsbrp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Subscript };
-                        CovertMDInlines(newsbrp, sb.Inlines, ref docPara);
+                        CovertMDInlines(newsbrp, sb.Inlines, ref paragraph, ref paragraphs);
                         break;
                     case SuperscriptTextInline sp:
                         RunProperties newsprp = (RunProperties)rp.Clone();
                         newsprp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Superscript };
-                        CovertMDInlines(newsprp, sp.Inlines, ref docPara);
+                        CovertMDInlines(newsprp, sp.Inlines, ref paragraph, ref paragraphs);
+                        break;
+                    case ImageInline img:
+                        ParagraphProperties newpp = (ParagraphProperties)paragraph.ParagraphProperties.Clone();
+                        paragraphs.Add(paragraph);
+                        paragraph = new Paragraph
+                        {
+                            ParagraphProperties = new ParagraphProperties
+                            {
+                                ParagraphStyleId = new ParagraphStyleId { Val = "Image Title" }
+                            }
+                        };
+                        Run run = new Run();
+                        Text txt = new Text { Text = img.Tooltip, Space = SpaceProcessingModeValues.Preserve };
+                        run.Append(txt);
+                        paragraph.Append(run);
+                        paragraphs.Add(paragraph);
+                        paragraph = new Paragraph { ParagraphProperties = newpp };
                         break;
                     default:
                         Console.WriteLine(inline.ToString());
@@ -251,31 +267,32 @@ Opntions:");
         /// </summary>
         /// <param name="block">Paragraph block, when block is not paragraph block, it throw a exception</param>
         /// <param name="docBody">In which we append our text</param>
-        private static void CovertQuoteRefer(MarkdownBlock block, ref Body docBody)
+        private static List<Paragraph> CovertQuoteRefer(QuoteBlock refer)
         {
-            if (!(block is ParagraphBlock))
+            List<Paragraph> paragraphs = new List<Paragraph>();
+
+            foreach (MarkdownBlock block in refer.Blocks)
             {
-                throw new Exception($"Rendering {block.GetType()} in reference in quote not support");
-            }
-            Paragraph docPara = new Paragraph
-            {
-                ParagraphProperties = new ParagraphProperties
+
+                if (!(block is ParagraphBlock))
                 {
-                    ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["引用"] }
+                    throw new Exception($"Rendering {block.GetType()} in reference in quote not support");
                 }
-            };
-            Run run = new Run
-            {
-                RunProperties = new RunProperties()
-            };
-            Text txt = new Text
-            {
-                Text = block.ToString(),
-                Space = SpaceProcessingModeValues.Preserve
-            };
-            run.Append(txt);
-            docPara.Append(run);
-            docBody.Append(docPara);
+                Paragraph paragraph = new Paragraph
+                {
+                    ParagraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["引用"] }
+                    }
+                };
+                Run run = new Run { RunProperties = new RunProperties() };
+                Text txt = new Text { Text = block.ToString(), Space = SpaceProcessingModeValues.Preserve };
+                run.Append(txt);
+                paragraph.Append(run);
+                paragraphs.Add(paragraph);
+            }
+
+            return paragraphs;
         }
 
         private static List<Paragraph> CovertCodeBlock(CodeBlock code)
@@ -314,8 +331,12 @@ Opntions:");
                         ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
                     }
                 };
-                CovertMDInlines(new RunProperties(), mpara.Inlines, ref docPara);
-                docBody.Append(docPara);
+                List<Paragraph> paragraphs = new List<Paragraph>();
+                CovertMDInlines(new RunProperties(), mpara.Inlines, ref docPara, ref paragraphs);
+                foreach (Paragraph paragraph in paragraphs)
+                {
+                    docBody.Append(paragraph);
+                }
             }
             else if (block is CodeBlock mcode)
             {
@@ -328,6 +349,7 @@ Opntions:");
             else if (block is HeaderBlock mhead)
             {
                 Paragraph docPara = new Paragraph { ParagraphProperties = new ParagraphProperties() };
+                List<Paragraph> paragraphs = new List<Paragraph>();
                 switch (mhead.HeaderLevel)
                 {
                     case int i when i < 10:
@@ -336,14 +358,19 @@ Opntions:");
                     default:
                         throw new Exception($"Rendering {block.GetType()} not implement yet");
                 }
-                CovertMDInlines(new RunProperties(), mhead.Inlines, ref docPara);
-                docBody.Append(docPara);
+                CovertMDInlines(new RunProperties(), mhead.Inlines, ref docPara, ref paragraphs);
+                paragraphs.Add(docPara);
+                foreach (Paragraph paragraph in paragraphs)
+                {
+                    docBody.Append(paragraph);
+                }
             }
             else if (block is QuoteBlock refer)
             {
-                foreach (var e in refer.Blocks)
+                List<Paragraph> paragraphs = CovertQuoteRefer(refer);
+                foreach (Paragraph paragraph in paragraphs)
                 {
-                    CovertQuoteRefer(e, ref docBody);
+                    docBody.Append(paragraph);
                 }
             }
             else if (!(block is YamlHeaderBlock))
