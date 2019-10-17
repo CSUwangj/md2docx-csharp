@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System;
-using Microsoft.Toolkit.Parsers.Markdown;
-using Microsoft.Toolkit.Parsers.Markdown.Blocks;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml;
-using Microsoft.Toolkit.Parsers.Markdown.Inlines;
 using A = DocumentFormat.OpenXml.Drawing;
 using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
-using Newtonsoft.Json.Linq;
 namespace md2docx
 {
     /// <summary>

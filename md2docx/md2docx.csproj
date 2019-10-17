@@ -73,6 +73,7 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneratedCode.cs" />
+    <Compile Include="ImageGetter.cs" />
     <Compile Include="md2docx.cs" />
     <Compile Include="StyleFactory.cs" />
   </ItemGroup>
