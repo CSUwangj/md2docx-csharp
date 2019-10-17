@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 
@@ -24,50 +28,15 @@ namespace md2docx
         {
             bool isUrl = Uri.TryCreate(origin, UriKind.Absolute, out Uri uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-            if (isUrl)
-            {
-                GetImageFromUrl(origin);
-            }
-            else
-            {
-                GetImageFromPath(origin);
-            }
-            return false;
-        }
-
-        private bool GetImageFromPath(string path)
-        {
             try
             {
-                Image img = Image.FromFile(path);
-                ImageData = File.ReadAllBytes(path);
-                Width = img.Width;
-                Height = img.Height;
-                return true;
-            }
-            catch
-            {
-                Fail();
-                return false;
-            }
-        }
-
-        private bool GetImageFromUrl(string url)
-        {
-            Console.WriteLine("WTF");
-            try
-            {
-                using (WebClient webClient = new WebClient())
+                if (isUrl)
                 {
-                    byte[] data = webClient.DownloadData(url);
-
-                    using (MemoryStream mem = new MemoryStream(data))
-                    {
-                        Image img = Image.FromStream(mem);
-                        Width = img.Width;
-                        Height = img.Height;
-                        data.CopyTo(ImageData, 0);
-                    }
+                    GetImageFromUrl(origin);
+                }
+                else
+                {
+                    GetImageFromPath(origin);
                 }
                 return true;
             }
@@ -76,6 +45,32 @@ namespace md2docx
                 Fail();
                 return false;
             }
+        }
+
+        private bool GetImageFromPath(string path)
+        {
+            Image img = Image.FromFile(path);
+            ImageData = File.ReadAllBytes(path);
+            Width = img.Width;
+            Height = img.Height;
+            return true;
+        }
+
+        private bool GetImageFromUrl(string url)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                byte[] data = webClient.DownloadData(url);
+
+                using (MemoryStream mem = new MemoryStream(data))
+                {
+                    Image img = Image.FromStream(mem);
+                    Width = img.Width;
+                    Height = img.Height;
+                    ImageData = data.ToArray();
+                }
+            }
+            return true;
         }
 
         private void Fail()
