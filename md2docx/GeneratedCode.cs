@@ -2059,7 +2059,7 @@ namespace md2docx
             fontTablePart1.Fonts = fonts1;
         }
 
-        public static Run GenerateImageReference(int id)
+        public static Run GenerateImageReference(int id, long width, long height)
         {
             Run run1 = new Run();
 
@@ -2070,10 +2070,10 @@ namespace md2docx
 
             Drawing drawing1 = new Drawing();
 
-            Wp.Inline inline1 = new Wp.Inline() { DistanceFromTop = (UInt32Value)0U, DistanceFromBottom = (UInt32Value)0U, DistanceFromLeft = (UInt32Value)0U, DistanceFromRight = (UInt32Value)0U, AnchorId = "06C249DF", EditId = "66989579" };
-            Wp.Extent extent1 = new Wp.Extent() { Cx = 1104900L, Cy = 1047750L };
+            Wp.Inline inline1 = new Wp.Inline() { DistanceFromTop = 0U, DistanceFromBottom = 0U, DistanceFromLeft = 0U, DistanceFromRight = 0U };
+            Wp.Extent extent1 = new Wp.Extent() { Cx = width, Cy = height };
             Wp.EffectExtent effectExtent1 = new Wp.EffectExtent() { LeftEdge = 0L, TopEdge = 0L, RightEdge = 0L, BottomEdge = 0L };
-            Wp.DocProperties docProperties1 = new Wp.DocProperties() { Id = (UInt32Value)1U, Name = $"图片 {id}" };
+            Wp.DocProperties docProperties1 = new Wp.DocProperties() { Id = 1U, Name = $"图片 {id}" };
 
             Wp.NonVisualGraphicFrameDrawingProperties nonVisualGraphicFrameDrawingProperties1 = new Wp.NonVisualGraphicFrameDrawingProperties();
 
@@ -2112,7 +2112,7 @@ namespace md2docx
 
             A.Transform2D transform2D1 = new A.Transform2D();
             A.Offset offset1 = new A.Offset() { X = 0L, Y = 0L };
-            A.Extents extents1 = new A.Extents() { Cx = 1104900L, Cy = 1047750L };
+            A.Extents extents1 = new A.Extents() { Cx = width, Cy = height };
 
             transform2D1.Append(offset1);
             transform2D1.Append(extents1);

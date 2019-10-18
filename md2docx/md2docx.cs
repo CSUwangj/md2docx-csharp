@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Toolkit.Parsers.Markdown;
 using Microsoft.Toolkit.Parsers.Markdown.Blocks;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -19,6 +20,11 @@ namespace md2docx
         static Dictionary<string, string> info = new Dictionary<string, string>();
         static Dictionary<string, string> correspondecs;
         static Dictionary<string, bool> optionalParts;
+        static Dictionary<int, byte[]> imageDatas = new Dictionary<int, byte[]>();
+        static Dictionary<int, string> imageType = new Dictionary<int, string>();
+        static List<int> failImage = new List<int>();
+        static int imageCount = 3;
+        static bool hasFailImage = false;
 
         /// <summary>
         /// Print usage without exit
@@ -111,6 +117,22 @@ Opntions:");
                 GeneratedCode.GenerateFontTablePartContent(fontTablePart1);
 
                 SetPackageProperties(document);
+
+                foreach(int index in imageType.Keys)
+                {
+                    ImagePart imagePart = mainDocumentPart1.AddNewPart<ImagePart>($"image/{imageType[index]}", $"rId{index}");
+                    imagePart.FeedData(new MemoryStream(imageDatas[index]));
+                }
+            }
+
+            if (hasFailImage && !quiet)
+            {
+                Console.WriteLine("Some image failed to insert, please check and insert it manually. Their index are(count from 1):");
+                foreach(int index in failImage)
+                {
+                    Console.Write($"{index} ");
+                }
+                Console.WriteLine("\nThis warning can also be closed by -q.");
             }
         }
         
@@ -248,7 +270,26 @@ Opntions:");
                                 ParagraphStyleId = new ParagraphStyleId { Val = "Image Title" }
                             }
                         };
-                        Run run = new Run();
+                        ImageGetter image = new ImageGetter();
+                        if (!image.Load(img.Url))
+                        {
+                            failImage.Add(imageCount - 2);
+                            hasFailImage = true;
+                        }
+                        imageType.Add(imageCount, image.Type);
+                        imageDatas.Add(imageCount, image.ImageData);
+                        Run run = GeneratedCode.GenerateImageReference(imageCount, image.Width, image.Height);
+                        paragraph.Append(run);
+                        paragraphs.Add(paragraph);
+                        imageCount += 1;
+                        paragraph = new Paragraph
+                        {
+                            ParagraphProperties = new ParagraphProperties
+                            {
+                                ParagraphStyleId = new ParagraphStyleId { Val = "Image Title" }
+                            }
+                        };
+                        run = new Run();
                         Text txt = new Text { Text = img.Tooltip, Space = SpaceProcessingModeValues.Preserve };
                         run.Append(txt);
                         paragraph.Append(run);

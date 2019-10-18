@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.IO;
 using System.Net;
+using System.Drawing.Imaging;
+using System.Collections.Generic;
 
 namespace md2docx
 {
@@ -15,8 +14,19 @@ namespace md2docx
     public class ImageGetter
     {
         public byte[] ImageData { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
+        public long Height { get; set; }
+        public long Width { get; set; }
+        public string Type { get; set; }
+        private readonly static string DefaultType = "jpeg";
+        private readonly static long DefaultHeight = 846000L;
+        private readonly static long DefaultWidth = 1724400L;
+        private readonly static long ratio = 914400L;
+        private readonly static Dictionary<ImageFormat, string> typeDictionary = new Dictionary<ImageFormat, string>
+        {
+            { ImageFormat.Png, "png" },
+            { ImageFormat.Jpeg, "jpeg" },
+            { ImageFormat.Gif, "gif" }
+        };
 
         public ImageGetter() { }
 
@@ -47,16 +57,16 @@ namespace md2docx
             }
         }
 
-        private bool GetImageFromPath(string path)
+        private void GetImageFromPath(string path)
         {
-            Image img = Image.FromFile(path);
-            ImageData = File.ReadAllBytes(path);
-            Width = img.Width;
-            Height = img.Height;
-            return true;
+            Image image = Image.FromFile(path);
+            Width = (long)(image.Width / image.HorizontalResolution * ratio);
+            Height = (long)(image.Height / image.HorizontalResolution * ratio);
+
+            DealFormat(ref image, File.ReadAllBytes(path));
         }
 
-        private bool GetImageFromUrl(string url)
+        private void GetImageFromUrl(string url)
         {
             using (WebClient webClient = new WebClient())
             {
@@ -64,20 +74,38 @@ namespace md2docx
 
                 using (MemoryStream mem = new MemoryStream(data))
                 {
-                    Image img = Image.FromStream(mem);
-                    Width = img.Width;
-                    Height = img.Height;
-                    ImageData = data.ToArray();
+                    Image image = Image.FromStream(mem);
+                    Width = (long)(image.Width / image.HorizontalResolution * ratio);
+                    Height = (long)(image.Height / image.HorizontalResolution * ratio);
+
+                    DealFormat(ref image, data);
                 }
             }
-            return true;
+        }
+
+        private void DealFormat(ref Image image, byte[] originalData)
+        {
+
+            if (!typeDictionary.ContainsKey(image.RawFormat))
+            {
+                MemoryStream stream = new MemoryStream();
+                image.Save(stream, ImageFormat.Png);
+                Type = DefaultType;
+                ImageData = stream.GetBuffer();
+            }
+            else
+            {
+                Type = typeDictionary[image.RawFormat];
+                ImageData = originalData;
+            }
         }
 
         private void Fail()
         {
             ImageData = hexData;
-            Width = 224;
-            Height = 110;
+            Width = DefaultWidth;
+            Height = DefaultHeight;
+            Type = DefaultType;
         }
 
         #region
