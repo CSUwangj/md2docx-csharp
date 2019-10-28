@@ -1,17 +1,18 @@
-# md2docx-csharp[![Build status](https://ci.appveyor.com/api/projects/status/github/CSUwangj/md2docx-csharp?branch=master&svg=true)](https://ci.appveyor.com/project/CSUwangj/md2docx-csharp/branch/master)
+# md2docx-csharp![](https://img.shields.io/github/license/CSUwangj/md2docx-csharp)[![Build status](https://ci.appveyor.com/api/projects/status/github/CSUwangj/md2docx-csharp?branch=master&svg=true)](https://ci.appveyor.com/project/CSUwangj/md2docx-csharp/branch/master)![](https://img.shields.io/github/v/release/CSUwangj/md2docx-csharp?include_prereleases)
 
----
 使用C#开发的将markdown转换为docx的工具。
 
-该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前1.0版已经完工，下一步动向见TODO。
+该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前2.1版已经完工，下一步动向见TODO。
 
 下载: [latest release](https://github.com/CSUwangj/md2docx-csharp/releases) | [latest CI build (master)](https://ci.appveyor.com/api/projects/CSUwangj/md2docx-csharp/artifacts/md2docx/bin/md2docx.zip)(文档未完成)
 
 ## 快速开始
 
-下载release中的`Release.zip`，解压后在解压的目录中，命令行使用，若无参数，则默认输入文件为同文件夹下的`test.md`。
+下载release中的`Release.zip`，解压后在解压的目录中，命令行使用。也可以将程序路径加入PATH方便使用。
 
-运行参数为`md2docx.exe <md input path> <docx output path>`，若不指定第一个参数，则默认读入同目录的`test.md`，若不指定第二个参数，则按照`<name><ID><filename>.docx`存储文件，各参数来自于markdown文件的yaml头部。
+无参数使用时除了提示信息外相当于`md2docx.exe -i input.md -c config.json -o <id><name><filename>.docx`。
+
+请注意图片路径的问题。
 
 ## 编译
 
@@ -41,11 +42,15 @@ schema文件为[schema](./docs/schema.json)，示例文件为[default config](./
 
 ## TODO
 
+未实现的TODO按照实现可能性降序排列
+
 - [x] 加入测试（并重构）
 - [x] 将格式等设置改为配置文件而非硬编码
 - [x] 部署CI
-- [ ] 将parser更换成一个标准更接近GFM的parser
+- [x] 图片
+- [ ] 根据文件设定路径
 - [ ] 页眉
 - [ ] 页脚
-- [ ] 图片
+- [ ] 将parser更换成一个标准更接近GFM的parser
 - [ ] 表格
+- [ ] 图形化
