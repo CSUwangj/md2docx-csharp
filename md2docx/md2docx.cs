@@ -113,7 +113,7 @@ Opntions:");
                 StyleDefinitionsPart styleDefinitionsPart1 = mainDocumentPart1.AddNewPart<StyleDefinitionsPart>("rId1");
                 GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1, (JArray)config["样式"]);
 
-                FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId6");
+                FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId0");
                 GeneratedCode.GenerateFontTablePartContent(fontTablePart1);
 
                 SetPackageProperties(document);
@@ -374,6 +374,7 @@ Opntions:");
                 };
                 List<Paragraph> paragraphs = new List<Paragraph>();
                 CovertMDInlines(new RunProperties(), mpara.Inlines, ref docPara, ref paragraphs);
+                docBody.Append(docPara);
                 foreach (Paragraph paragraph in paragraphs)
                 {
                     docBody.Append(paragraph);
