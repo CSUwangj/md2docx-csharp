@@ -31,3 +31,10 @@ jobs:
       with:
         name: md2docx
         path: md2docx\bin\Release
+     
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: example
+        path: examples
+        
