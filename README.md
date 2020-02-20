@@ -22,9 +22,9 @@
 
 ### MSBuild
 
-`MSBuild.exe Solution.sln /p:Configuration=Debug /p:Platform="Any CPU"`
+`MSBuild.exe md2docx.sln /p:Configuration=Debug /p:Platform="Any CPU"`
 
-`MSBuild.exe Solution.sln /p:Configuration=Release /p:Platform="Any CPU"`
+`MSBuild.exe md2docx.sln /p:Configuration=Release /p:Platform="Any CPU"`
 
 输出路径为`md2docx\bin\(Debug|Release)`
 
