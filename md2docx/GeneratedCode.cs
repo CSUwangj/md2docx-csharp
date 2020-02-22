@@ -6,6 +6,8 @@ using DocumentFormat.OpenXml;
 using A = DocumentFormat.OpenXml.Drawing;
 using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
+using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
+
 namespace md2docx
 {
     /// <summary>
@@ -2145,6 +2147,257 @@ namespace md2docx
             run1.Append(drawing1);
 
             return run1;
+        }
+
+        public static void GenerateHeaderPartContent(HeaderPart headerPart, string title)
+        {
+            Header header = new Header() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid wp14" } };
+            header.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+            header.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
+            header.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
+            header.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
+            header.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
+            header.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
+            header.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
+            header.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
+            header.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
+            header.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
+            header.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            header.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
+            header.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
+            header.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+            header.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            header.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            header.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+            header.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+            header.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            header.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+            header.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+            header.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+            header.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+            header.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
+            header.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            header.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            header.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+            header.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+            header.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+
+            Paragraph paragraph1 = new Paragraph() { RsidParagraphMarkRevision = "000724D3", RsidParagraphAddition = "000724D3", RsidParagraphProperties = "000724D3", RsidRunAdditionDefault = "000724D3", ParagraphId = "1A187061", TextId = "33744066" };
+
+            ParagraphProperties paragraphProperties1 = new ParagraphProperties();
+
+            ParagraphBorders paragraphBorders2 = new ParagraphBorders();
+            BottomBorder bottomBorder2 = new BottomBorder() { Val = BorderValues.Single, Color = "auto", Size = (UInt32Value)6U, Space = (UInt32Value)0U };
+
+            paragraphBorders2.Append(bottomBorder2);
+
+            Tabs tabs3 = new Tabs();
+            TabStop tabStop5 = new TabStop() { Val = TabStopValues.Left, Position = 1485 };
+            TabStop tabStop6 = new TabStop() { Val = TabStopValues.Center, Position = 4153 };
+            TabStop tabStop7 = new TabStop() { Val = TabStopValues.Right, Position = 8306 };
+
+            tabs3.Append(tabStop5);
+            tabs3.Append(tabStop6);
+            tabs3.Append(tabStop7);
+            SnapToGrid snapToGrid3 = new SnapToGrid() { Val = false };
+            Justification justification4 = new Justification() { Val = JustificationValues.Distribute };
+
+            ParagraphMarkRunProperties paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
+            RunFonts runFonts2 = new RunFonts() { Ascii = "黑体", EastAsia = "黑体" };
+            FontSize fontSize5 = new FontSize() { Val = "18" };
+            FontSizeComplexScript fontSizeComplexScript5 = new FontSizeComplexScript() { Val = "18" };
+
+            paragraphMarkRunProperties1.Append(runFonts2);
+            paragraphMarkRunProperties1.Append(fontSize5);
+            paragraphMarkRunProperties1.Append(fontSizeComplexScript5);
+
+            paragraphProperties1.Append(paragraphBorders2);
+            paragraphProperties1.Append(tabs3);
+            paragraphProperties1.Append(snapToGrid3);
+            paragraphProperties1.Append(justification4);
+            paragraphProperties1.Append(paragraphMarkRunProperties1);
+
+            Run run1 = new Run();
+
+            RunProperties runProperties1 = new RunProperties();
+            RunFonts runFonts3 = new RunFonts() { Ascii = "华文楷体", HighAnsi = "华文楷体", EastAsia = "华文楷体" };
+            Bold bold1 = new Bold();
+            BoldComplexScript boldComplexScript1 = new BoldComplexScript();
+            NoProof noProof1 = new NoProof();
+            Kern kern2 = new Kern() { Val = (UInt32Value)0U };
+            FontSize fontSize6 = new FontSize() { Val = "72" };
+            FontSizeComplexScript fontSizeComplexScript6 = new FontSizeComplexScript() { Val = "72" };
+
+            runProperties1.Append(runFonts3);
+            runProperties1.Append(bold1);
+            runProperties1.Append(boldComplexScript1);
+            runProperties1.Append(noProof1);
+            runProperties1.Append(kern2);
+            runProperties1.Append(fontSize6);
+            runProperties1.Append(fontSizeComplexScript6);
+
+            Drawing drawing1 = new Drawing();
+
+            Wp.Inline inline1 = new Wp.Inline() { DistanceFromTop = (UInt32Value)0U, DistanceFromBottom = (UInt32Value)0U, DistanceFromLeft = (UInt32Value)0U, DistanceFromRight = (UInt32Value)0U, AnchorId = "64BA7B75", EditId = "611F1D7B" };
+            Wp.Extent extent1 = new Wp.Extent() { Cx = 1095375L, Cy = 285750L };
+            Wp.EffectExtent effectExtent1 = new Wp.EffectExtent() { LeftEdge = 0L, TopEdge = 0L, RightEdge = 9525L, BottomEdge = 0L };
+            Wp.DocProperties docProperties1 = new Wp.DocProperties() { Id = (UInt32Value)141U, Name = "图片 141", Description = "毕业设计(论文)图标" };
+
+            Wp.NonVisualGraphicFrameDrawingProperties nonVisualGraphicFrameDrawingProperties1 = new Wp.NonVisualGraphicFrameDrawingProperties();
+
+            A.GraphicFrameLocks graphicFrameLocks1 = new A.GraphicFrameLocks() { NoChangeAspect = true };
+            graphicFrameLocks1.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+
+            nonVisualGraphicFrameDrawingProperties1.Append(graphicFrameLocks1);
+
+            A.Graphic graphic1 = new A.Graphic();
+            graphic1.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+
+            A.GraphicData graphicData1 = new A.GraphicData() { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" };
+
+            Pic.Picture picture1 = new Pic.Picture();
+            picture1.AddNamespaceDeclaration("pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
+
+            Pic.NonVisualPictureProperties nonVisualPictureProperties1 = new Pic.NonVisualPictureProperties();
+            Pic.NonVisualDrawingProperties nonVisualDrawingProperties1 = new Pic.NonVisualDrawingProperties() { Id = (UInt32Value)0U, Name = "Picture 10", Description = "毕业设计(论文)图标" };
+
+            Pic.NonVisualPictureDrawingProperties nonVisualPictureDrawingProperties1 = new Pic.NonVisualPictureDrawingProperties();
+            A.PictureLocks pictureLocks1 = new A.PictureLocks() { NoChangeAspect = true, NoChangeArrowheads = true };
+
+            nonVisualPictureDrawingProperties1.Append(pictureLocks1);
+
+            nonVisualPictureProperties1.Append(nonVisualDrawingProperties1);
+            nonVisualPictureProperties1.Append(nonVisualPictureDrawingProperties1);
+
+            Pic.BlipFill blipFill1 = new Pic.BlipFill();
+
+            A.Blip blip1 = new A.Blip() { Embed = "rId4" };
+
+            A.BlipExtensionList blipExtensionList1 = new A.BlipExtensionList();
+
+            A.BlipExtension blipExtension1 = new A.BlipExtension() { Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}" };
+
+            A14.UseLocalDpi useLocalDpi1 = new A14.UseLocalDpi() { Val = false };
+            useLocalDpi1.AddNamespaceDeclaration("a14", "http://schemas.microsoft.com/office/drawing/2010/main");
+
+            blipExtension1.Append(useLocalDpi1);
+
+            blipExtensionList1.Append(blipExtension1);
+
+            blip1.Append(blipExtensionList1);
+            A.SourceRectangle sourceRectangle1 = new A.SourceRectangle();
+
+            A.Stretch stretch1 = new A.Stretch();
+            A.FillRectangle fillRectangle1 = new A.FillRectangle();
+
+            stretch1.Append(fillRectangle1);
+
+            blipFill1.Append(blip1);
+            blipFill1.Append(sourceRectangle1);
+            blipFill1.Append(stretch1);
+
+            Pic.ShapeProperties shapeProperties1 = new Pic.ShapeProperties() { BlackWhiteMode = A.BlackWhiteModeValues.Auto };
+
+            A.Transform2D transform2D1 = new A.Transform2D();
+            A.Offset offset1 = new A.Offset() { X = 0L, Y = 0L };
+            A.Extents extents1 = new A.Extents() { Cx = 1095375L, Cy = 285750L };
+
+            transform2D1.Append(offset1);
+            transform2D1.Append(extents1);
+
+            A.PresetGeometry presetGeometry1 = new A.PresetGeometry() { Preset = A.ShapeTypeValues.Rectangle };
+            A.AdjustValueList adjustValueList1 = new A.AdjustValueList();
+
+            presetGeometry1.Append(adjustValueList1);
+            A.NoFill noFill1 = new A.NoFill();
+
+            A.Outline outline4 = new A.Outline();
+            A.NoFill noFill2 = new A.NoFill();
+
+            outline4.Append(noFill2);
+
+            shapeProperties1.Append(transform2D1);
+            shapeProperties1.Append(presetGeometry1);
+            shapeProperties1.Append(noFill1);
+            shapeProperties1.Append(outline4);
+
+            picture1.Append(nonVisualPictureProperties1);
+            picture1.Append(blipFill1);
+            picture1.Append(shapeProperties1);
+
+            graphicData1.Append(picture1);
+
+            graphic1.Append(graphicData1);
+
+            inline1.Append(extent1);
+            inline1.Append(effectExtent1);
+            inline1.Append(docProperties1);
+            inline1.Append(nonVisualGraphicFrameDrawingProperties1);
+            inline1.Append(graphic1);
+
+            drawing1.Append(inline1);
+
+            run1.Append(runProperties1);
+            run1.Append(drawing1);
+
+            Run run2 = new Run();
+
+            RunProperties runProperties2 = new RunProperties();
+            RunFonts runFonts4 = new RunFonts() { Ascii = "黑体", HighAnsi = "Times", EastAsia = "黑体" };
+            FontSize fontSize7 = new FontSize() { Val = "18" };
+            FontSizeComplexScript fontSizeComplexScript7 = new FontSizeComplexScript() { Val = "18" };
+
+            runProperties2.Append(runFonts4);
+            runProperties2.Append(fontSize7);
+            runProperties2.Append(fontSizeComplexScript7);
+            Text text1 = new Text() { Space = SpaceProcessingModeValues.Preserve };
+            text1.Text = "                                              ";
+
+            run2.Append(runProperties2);
+            run2.Append(text1);
+
+            Run run3 = new Run() { RsidRunProperties = "00812D6B" };
+
+            RunProperties runProperties3 = new RunProperties();
+            RunFonts runFonts5 = new RunFonts() { Hint = FontTypeHintValues.EastAsia, Ascii = "黑体", HighAnsi = "Times", EastAsia = "黑体" };
+            FontSize fontSize8 = new FontSize() { Val = "18" };
+            FontSizeComplexScript fontSizeComplexScript8 = new FontSizeComplexScript() { Val = "18" };
+
+            runProperties3.Append(runFonts5);
+            runProperties3.Append(fontSize8);
+            runProperties3.Append(fontSizeComplexScript8);
+            Text text2 = new Text();
+            text2.Text = title;
+
+            run3.Append(runProperties3);
+            run3.Append(text2);
+
+            Run run4 = new Run() { RsidRunProperties = "006039A8" };
+
+            RunProperties runProperties4 = new RunProperties();
+            RunFonts runFonts6 = new RunFonts() { Hint = FontTypeHintValues.EastAsia, Ascii = "黑体", EastAsia = "黑体" };
+            FontSize fontSize9 = new FontSize() { Val = "18" };
+            FontSizeComplexScript fontSizeComplexScript9 = new FontSizeComplexScript() { Val = "18" };
+
+            runProperties4.Append(runFonts6);
+            runProperties4.Append(fontSize9);
+            runProperties4.Append(fontSizeComplexScript9);
+            Text text3 = new Text() { Space = SpaceProcessingModeValues.Preserve };
+            text3.Text = " ";
+
+            run4.Append(runProperties4);
+            run4.Append(text3);
+
+            paragraph1.Append(paragraphProperties1);
+            paragraph1.Append(run1);
+            paragraph1.Append(run2);
+            paragraph1.Append(run3);
+            paragraph1.Append(run4);
+
+            header.Append(paragraph1);
+
+            headerPart.Header = header;
+
         }
     }
 }
