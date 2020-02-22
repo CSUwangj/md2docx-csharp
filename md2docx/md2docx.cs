@@ -23,7 +23,7 @@ namespace md2docx
         static Dictionary<int, byte[]> imageDatas = new Dictionary<int, byte[]>();
         static Dictionary<int, string> imageType = new Dictionary<int, string>();
         static List<int> failImage = new List<int>();
-        static int imageCount = 3;
+        static int imageCount = 1;
         static bool hasFailImage = false;
 
         /// <summary>
@@ -120,7 +120,7 @@ Opntions:");
 
                 foreach(int index in imageType.Keys)
                 {
-                    ImagePart imagePart = mainDocumentPart1.AddNewPart<ImagePart>($"image/{imageType[index]}", $"rId{index}");
+                    ImagePart imagePart = mainDocumentPart1.AddNewPart<ImagePart>($"image/{imageType[index]}", $"image{index}");
                     imagePart.FeedData(new MemoryStream(imageDatas[index]));
                 }
             }
@@ -273,7 +273,7 @@ Opntions:");
                         ImageGetter image = new ImageGetter();
                         if (!image.Load(img.Url))
                         {
-                            failImage.Add(imageCount - 2);
+                            failImage.Add(imageCount);
                             hasFailImage = true;
                         }
                         imageType.Add(imageCount, image.Type);
