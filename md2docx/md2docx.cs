@@ -107,27 +107,35 @@ Opntions:");
 
             using (WordprocessingDocument document = WordprocessingDocument.Create(docPath, WordprocessingDocumentType.Document))
             {
-                MainDocumentPart mainDocumentPart1 = document.AddMainDocumentPart();
-                GenerateMainPart(mainDocumentPart1, mddoc);
+                MainDocumentPart mainPart = document.AddMainDocumentPart();
+                GenerateMainPart(mainPart, mddoc);
               
-                StyleDefinitionsPart styleDefinitionsPart1 = mainDocumentPart1.AddNewPart<StyleDefinitionsPart>("rId1");
+                StyleDefinitionsPart styleDefinitionsPart1 = mainPart.AddNewPart<StyleDefinitionsPart>("rId1");
                 GenerateStyleDefinitionsPart1Content(styleDefinitionsPart1, (JArray)config["样式"]);
 
-                FontTablePart fontTablePart1 = mainDocumentPart1.AddNewPart<FontTablePart>("rId0");
+                FontTablePart fontTablePart1 = mainPart.AddNewPart<FontTablePart>("rId0");
                 GeneratedCode.GenerateFontTablePartContent(fontTablePart1);
 
                 if (optionalParts["页眉"])
                 {
-                    HeaderPart headerPart = mainDocumentPart1.AddNewPart<HeaderPart>("rId3");
-                    GeneratedCode.GenerateHeaderPartContent(headerPart, info["filename"]);
+                    HeaderPart headerPart = mainPart.AddNewPart<HeaderPart>("rId3");
+                    GeneratedCode.GenerateHeaderPartContent(headerPart, info["title"]);
                     GenerateImage(headerPart.AddNewPart<ImagePart>("image/jpeg", "rId4"), HeaderImageData);
+                }
+
+                if (optionalParts["页脚"])
+                {
+                    FooterPart footerI = mainPart.AddNewPart<FooterPart>("rId5");
+                    GeneratedCode.GenerateIFooterPart(footerI);
+                    FooterPart footer1 = mainPart.AddNewPart<FooterPart>("rId6");
+                    GeneratedCode.Generate1FooterPart(footer1);
                 }
 
                 SetPackageProperties(document);
 
                 foreach(int index in imageType.Keys)
                 {
-                    ImagePart imagePart = mainDocumentPart1.AddNewPart<ImagePart>($"image/{imageType[index]}", $"image{index}");
+                    ImagePart imagePart = mainPart.AddNewPart<ImagePart>($"image/{imageType[index]}", $"image{index}");
                     imagePart.FeedData(new MemoryStream(imageDatas[index]));
                 }
             }
@@ -159,7 +167,7 @@ Opntions:");
             if (optionalParts["封面"])
             {
                 GenerateImage(mainPart.AddNewPart<ImagePart>("image/jpeg", "rId2"), CoverImageData);
-                GeneratedCode.GenerateCover(ref docBody, info);
+                GeneratedCode.GenerateCover(ref docBody, info, optionalParts["页眉"]);
             }
 
             if (optionalParts["摘要"] && info.ContainsKey("c_title"))
@@ -173,7 +181,7 @@ Opntions:");
 
             if (optionalParts["目录"])
             {
-                GeneratedCode.GenerateTOC(ref docBody);
+                GeneratedCode.GenerateTOC(ref docBody, optionalParts["页眉"], optionalParts["页脚"]);
             }
 
             // rendering body text(paragraph/heading, others are TBD)
@@ -181,14 +189,20 @@ Opntions:");
             {
                 CovertMarkdownBlock(block, ref docBody);
             }
-
             
             SectionProperties sectionProperties1 = new SectionProperties();
             PageSize pageSize1 = new PageSize() { Width = 11906U, Height = 16838U };
             if (optionalParts["页眉"])
             {
-                HeaderReference headerReference1 = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "rId3" };
-                sectionProperties1.Append(headerReference1);
+                HeaderReference headerReference = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "rId3" };
+                sectionProperties1.Append(headerReference);
+            }
+            if (optionalParts["页脚"])
+            {
+                FooterReference footerReference = new FooterReference() { Type = HeaderFooterValues.Default, Id = "rId6" };
+                PageNumberType pageNumberType1 = new PageNumberType() { Start = 1 };
+                sectionProperties1.Append(footerReference);
+                sectionProperties1.Append(pageNumberType1);
             }
             PageMargin pageMargin1 = new PageMargin() { Top = 1418, Right = 1134U, Bottom = 1418, Left = 1701U, Header = 851U, Footer = 992U, Gutter = 0U };
             Columns columns1 = new Columns() { Space = "425" };

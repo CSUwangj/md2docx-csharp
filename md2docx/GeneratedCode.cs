@@ -781,7 +781,255 @@ namespace md2docx
             return latentStyles;
         }
 
-        public static void GenerateCover(ref Body docBody, Dictionary<string, string> info)
+        public static void Generate1FooterPart(FooterPart part)
+        {
+
+            Footer footer1 = new Footer() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid wp14" } };
+            footer1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+            footer1.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
+            footer1.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
+            footer1.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
+            footer1.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
+            footer1.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
+            footer1.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
+            footer1.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
+            footer1.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
+            footer1.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
+            footer1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            footer1.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
+            footer1.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
+            footer1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+            footer1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            footer1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            footer1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+            footer1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+            footer1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            footer1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+            footer1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+            footer1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+            footer1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+            footer1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
+            footer1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            footer1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            footer1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+            footer1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+            footer1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+
+            SdtBlock sdtBlock1 = new SdtBlock();
+
+            SdtProperties sdtProperties1 = new SdtProperties();
+            SdtId sdtId1 = new SdtId() { Val = -1144034156 };
+
+            SdtContentDocPartObject sdtContentDocPartObject1 = new SdtContentDocPartObject();
+            DocPartGallery docPartGallery1 = new DocPartGallery() { Val = "Page Numbers (Bottom of Page)" };
+            DocPartUnique docPartUnique1 = new DocPartUnique();
+
+            sdtContentDocPartObject1.Append(docPartGallery1);
+            sdtContentDocPartObject1.Append(docPartUnique1);
+
+            sdtProperties1.Append(sdtId1);
+            sdtProperties1.Append(sdtContentDocPartObject1);
+            SdtEndCharProperties sdtEndCharProperties1 = new SdtEndCharProperties();
+
+            SdtContentBlock sdtContentBlock1 = new SdtContentBlock();
+
+            Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = "00826B60", RsidRunAdditionDefault = "00826B60", ParagraphId = "34D1FE1C", TextId = "7A33BCDB" };
+
+            ParagraphProperties paragraphProperties1 = new ParagraphProperties();
+            ParagraphStyleId paragraphStyleId1 = new ParagraphStyleId() { Val = "a5" };
+            Justification justification1 = new Justification() { Val = JustificationValues.Center };
+
+            paragraphProperties1.Append(paragraphStyleId1);
+            paragraphProperties1.Append(justification1);
+
+            Run run1 = new Run();
+            FieldChar fieldChar1 = new FieldChar() { FieldCharType = FieldCharValues.Begin };
+
+            run1.Append(fieldChar1);
+
+            Run run2 = new Run();
+            FieldCode fieldCode1 = new FieldCode();
+            fieldCode1.Text = "PAGE   \\* MERGEFORMAT";
+
+            run2.Append(fieldCode1);
+
+            Run run3 = new Run();
+            FieldChar fieldChar2 = new FieldChar() { FieldCharType = FieldCharValues.Separate };
+
+            run3.Append(fieldChar2);
+
+            Run run4 = new Run();
+
+            RunProperties runProperties1 = new RunProperties();
+            Languages languages1 = new Languages() { Val = "zh-CN" };
+
+            runProperties1.Append(languages1);
+            Text text1 = new Text();
+            text1.Text = "0";
+
+            run4.Append(runProperties1);
+            run4.Append(text1);
+
+            Run run5 = new Run();
+            FieldChar fieldChar3 = new FieldChar() { FieldCharType = FieldCharValues.End };
+
+            run5.Append(fieldChar3);
+
+            paragraph1.Append(paragraphProperties1);
+            paragraph1.Append(run1);
+            paragraph1.Append(run2);
+            paragraph1.Append(run3);
+            paragraph1.Append(run4);
+            paragraph1.Append(run5);
+
+            BookmarkStart bookmarkStart1 = new BookmarkStart() { Name = "_GoBack", DisplacedByCustomXml = DisplacedByCustomXmlValues.Previous, Id = "0" };
+            BookmarkEnd bookmarkEnd1 = new BookmarkEnd() { DisplacedByCustomXml = DisplacedByCustomXmlValues.Previous, Id = "0" };
+
+            sdtContentBlock1.Append(bookmarkStart1);
+            sdtContentBlock1.Append(bookmarkEnd1);
+            sdtContentBlock1.Append(paragraph1);
+
+            sdtBlock1.Append(sdtProperties1);
+            sdtBlock1.Append(sdtEndCharProperties1);
+            sdtBlock1.Append(sdtContentBlock1);
+
+            Paragraph paragraph2 = new Paragraph() { RsidParagraphAddition = "00826B60", RsidRunAdditionDefault = "00826B60", ParagraphId = "2BB488F1", TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties2 = new ParagraphProperties();
+            ParagraphStyleId paragraphStyleId2 = new ParagraphStyleId() { Val = "a5" };
+
+            paragraphProperties2.Append(paragraphStyleId2);
+
+            paragraph2.Append(paragraphProperties2);
+
+            footer1.Append(sdtBlock1);
+            footer1.Append(paragraph2);
+
+            part.Footer = footer1;
+        }
+
+        public static void GenerateIFooterPart(FooterPart part)
+        {
+            Footer footer1 = new Footer() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se w16cid wp14" } };
+            footer1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+            footer1.AddNamespaceDeclaration("cx", "http://schemas.microsoft.com/office/drawing/2014/chartex");
+            footer1.AddNamespaceDeclaration("cx1", "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex");
+            footer1.AddNamespaceDeclaration("cx2", "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex");
+            footer1.AddNamespaceDeclaration("cx3", "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex");
+            footer1.AddNamespaceDeclaration("cx4", "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex");
+            footer1.AddNamespaceDeclaration("cx5", "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex");
+            footer1.AddNamespaceDeclaration("cx6", "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex");
+            footer1.AddNamespaceDeclaration("cx7", "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex");
+            footer1.AddNamespaceDeclaration("cx8", "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex");
+            footer1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+            footer1.AddNamespaceDeclaration("aink", "http://schemas.microsoft.com/office/drawing/2016/ink");
+            footer1.AddNamespaceDeclaration("am3d", "http://schemas.microsoft.com/office/drawing/2017/model3d");
+            footer1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+            footer1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            footer1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+            footer1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+            footer1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+            footer1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            footer1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+            footer1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+            footer1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+            footer1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+            footer1.AddNamespaceDeclaration("w16cid", "http://schemas.microsoft.com/office/word/2016/wordml/cid");
+            footer1.AddNamespaceDeclaration("w16se", "http://schemas.microsoft.com/office/word/2015/wordml/symex");
+            footer1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            footer1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+            footer1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+            footer1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+
+            SdtBlock sdtBlock1 = new SdtBlock();
+
+            SdtProperties sdtProperties1 = new SdtProperties();
+            SdtId sdtId1 = new SdtId() { Val = 1445193178 };
+
+            SdtContentDocPartObject sdtContentDocPartObject1 = new SdtContentDocPartObject();
+            DocPartGallery docPartGallery1 = new DocPartGallery() { Val = "Page Numbers (Bottom of Page)" };
+            DocPartUnique docPartUnique1 = new DocPartUnique();
+
+            sdtContentDocPartObject1.Append(docPartGallery1);
+            sdtContentDocPartObject1.Append(docPartUnique1);
+
+            sdtProperties1.Append(sdtId1);
+            sdtProperties1.Append(sdtContentDocPartObject1);
+            SdtEndCharProperties sdtEndCharProperties1 = new SdtEndCharProperties();
+
+            SdtContentBlock sdtContentBlock1 = new SdtContentBlock();
+
+            Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = "00826B60", RsidRunAdditionDefault = "00826B60", ParagraphId = "280F2866", TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties1 = new ParagraphProperties();
+            ParagraphStyleId paragraphStyleId1 = new ParagraphStyleId() { Val = "a5" };
+            Justification justification1 = new Justification() { Val = JustificationValues.Center };
+
+            paragraphProperties1.Append(paragraphStyleId1);
+            paragraphProperties1.Append(justification1);
+
+            Run run1 = new Run();
+            FieldChar fieldChar1 = new FieldChar() { FieldCharType = FieldCharValues.Begin };
+
+            run1.Append(fieldChar1);
+
+            Run run2 = new Run();
+            FieldCode fieldCode1 = new FieldCode();
+            fieldCode1.Text = "PAGE   \\* MERGEFORMAT";
+
+            run2.Append(fieldCode1);
+
+            Run run3 = new Run();
+            FieldChar fieldChar2 = new FieldChar() { FieldCharType = FieldCharValues.Separate };
+
+            run3.Append(fieldChar2);
+
+            Run run4 = new Run();
+
+            RunProperties runProperties1 = new RunProperties();
+            Languages languages1 = new Languages() { Val = "zh-CN" };
+
+            runProperties1.Append(languages1);
+            Text text1 = new Text();
+            text1.Text = "2";
+
+            run4.Append(runProperties1);
+            run4.Append(text1);
+
+            Run run5 = new Run();
+            FieldChar fieldChar3 = new FieldChar() { FieldCharType = FieldCharValues.End };
+
+            run5.Append(fieldChar3);
+
+            paragraph1.Append(paragraphProperties1);
+            paragraph1.Append(run1);
+            paragraph1.Append(run2);
+            paragraph1.Append(run3);
+            paragraph1.Append(run4);
+            paragraph1.Append(run5);
+
+            sdtContentBlock1.Append(paragraph1);
+
+            sdtBlock1.Append(sdtProperties1);
+            sdtBlock1.Append(sdtEndCharProperties1);
+            sdtBlock1.Append(sdtContentBlock1);
+
+            Paragraph paragraph2 = new Paragraph() { RsidParagraphAddition = "00826B60", RsidRunAdditionDefault = "00826B60", ParagraphId = "688DAA4B", TextId = "77777777" };
+
+            ParagraphProperties paragraphProperties2 = new ParagraphProperties();
+            ParagraphStyleId paragraphStyleId2 = new ParagraphStyleId() { Val = "a5" };
+
+            paragraphProperties2.Append(paragraphStyleId2);
+
+            paragraph2.Append(paragraphProperties2);
+
+            footer1.Append(sdtBlock1);
+            footer1.Append(paragraph2);
+
+            part.Footer = footer1;
+        }
+
+        public static void GenerateCover(ref Body docBody, Dictionary<string, string> info, bool hasHeader)
         {
             Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = "003672AC", RsidParagraphProperties = "003672AC", RsidRunAdditionDefault = "003672AC", ParagraphId = "71725C42", TextId = "77777777" };
 
@@ -1848,7 +2096,22 @@ namespace md2docx
 
             ParagraphProperties paragraphProperties27 = new ParagraphProperties();
             Justification justification15 = new Justification() { Val = JustificationValues.Center };
-
+            SectionProperties sectionProperties1 = new SectionProperties();
+            if (hasHeader)
+            {
+                HeaderReference headerReference1 = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "rId3" };
+                sectionProperties1.Append(headerReference1);
+            }
+            PageSize pageSize1 = new PageSize() { Width = 11906U, Height = 16838U };
+            PageMargin pageMargin1 = new PageMargin() { Top = 1418, Right = 1134U, Bottom = 1418, Left = 1701U, Header = 851U, Footer = 992U, Gutter = 0U };
+            Columns columns1 = new Columns() { Space = "425" };
+            DocGrid docGrid1 = new DocGrid() { Type = DocGridValues.Lines, LinePitch = 312 }; 
+            sectionProperties1.Append(pageSize1);
+            sectionProperties1.Append(pageMargin1);
+            sectionProperties1.Append(columns1);
+            sectionProperties1.Append(docGrid1);
+            
+            paragraphProperties27.Append(sectionProperties1);
             paragraphProperties27.Append(justification15);
 
             Run run20 = new Run();
@@ -1891,7 +2154,7 @@ namespace md2docx
             docBody.Append(paragraph27);
         }
 
-        public static void GenerateTOC(ref Body docBody)
+        public static void GenerateTOC(ref Body docBody, bool hasHeader, bool hasFooter)
         {
             Paragraph para = new Paragraph
             {
@@ -1974,8 +2237,10 @@ namespace md2docx
             runProperties5.Append(bold2);
             runProperties5.Append(boldComplexScript2);
             runProperties5.Append(noProof1);
-            Text text3 = new Text();
-            text3.Text = "请手动点击<更新目录>按钮更新目录";
+            Text text3 = new Text
+            {
+                Text = "请手动点击<更新目录>按钮更新目录"
+            };
 
             run4.Append(runProperties5);
             run4.Append(text3);
@@ -1989,8 +2254,41 @@ namespace md2docx
             sdtBlock1.Append(sdtProperties1);
             sdtBlock1.Append(sdtEndCharProperties1);
             sdtBlock1.Append(sdtContentBlock1);
-
+            
             docBody.Append(sdtBlock1);
+
+            para = new Paragraph();
+
+            ParagraphProperties paragraphProperties = new ParagraphProperties();
+
+            SectionProperties sectionProperties = new SectionProperties() { RsidR = "00160BE2", RsidSect = "00826B60" };
+            if (hasHeader)
+            {
+                HeaderReference headerReference1 = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "rId3" };
+                sectionProperties.Append(headerReference1);
+            }
+            if (hasFooter)
+            {
+                FooterReference footerReference4 = new FooterReference() { Type = HeaderFooterValues.Default, Id = "rId5" };
+                sectionProperties.Append(footerReference4);
+            }
+            PageSize pageSize2 = new PageSize() { Width = 11906U, Height = 16838U };
+            PageMargin pageMargin2 = new PageMargin() { Top = 1440, Right = 1800U, Bottom = 1440, Left = 1800U, Header = 851U, Footer = 992U, Gutter = 0U };
+            PageNumberType pageNumberType1 = new PageNumberType() { Format = NumberFormatValues.UpperRoman, Start = 1 };
+            Columns columns2 = new Columns() { Space = "425" };
+            DocGrid docGrid2 = new DocGrid() { Type = DocGridValues.Lines, LinePitch = 312 };
+            sectionProperties.Append(pageSize2);
+            sectionProperties.Append(pageMargin2);
+            sectionProperties.Append(pageNumberType1);
+            sectionProperties.Append(columns2);
+            sectionProperties.Append(docGrid2);
+
+            paragraphProperties.Append(sectionProperties);
+
+            Run run14 = new Run();
+            para.Append(paragraphProperties);
+            para.Append(run14);
+            docBody.Append(para);
         }
         
         public static void GenerateFontTablePartContent(FontTablePart fontTablePart1)
@@ -2351,7 +2649,7 @@ namespace md2docx
             runProperties2.Append(fontSize7);
             runProperties2.Append(fontSizeComplexScript7);
             Text text1 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text1.Text = "                                              ";
+            text1.Text = "                         ";
 
             run2.Append(runProperties2);
             run2.Append(text1);

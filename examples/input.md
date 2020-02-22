@@ -3,6 +3,7 @@ name: 测试人
 id: 1234567890
 teacher: 张某
 department: 某学院
+title: 一个看似很厉害的标题
 c_title: 一个看似很厉害的标题
 e_title: One NewBee name
 filename: 这是报告的名字
