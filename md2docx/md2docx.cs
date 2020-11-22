@@ -25,7 +25,8 @@ namespace md2docx
         static List<int> failImage = new List<int>();
         static int imageCount = 1;
         static bool hasFailImage = false;
-
+        static int mdLinkCount = 0;
+        static Dictionary<string, string> mdLinkId = new Dictionary<string, string>();
         /// <summary>
         /// Print usage without exit
         /// </summary>
@@ -137,6 +138,11 @@ Opntions:");
                 {
                     ImagePart imagePart = mainPart.AddNewPart<ImagePart>($"image/{imageType[index]}", $"image{index}");
                     imagePart.FeedData(new MemoryStream(imageDatas[index]));
+                }
+                //处理超链接
+                foreach (KeyValuePair<string, string> urlId in mdLinkId)
+                {
+                    mainPart.AddHyperlinkRelationship(new System.Uri(urlId.Key, System.UriKind.Absolute), true, urlId.Value);
                 }
             }
 
@@ -286,6 +292,28 @@ Opntions:");
                         RunProperties newsprp = (RunProperties)rp.Clone();
                         newsprp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Superscript };
                         CovertMDInlines(newsprp, sp.Inlines, ref paragraph, ref paragraphs);
+                        break;
+                    case MarkdownLinkInline lk:
+                        ++mdLinkCount;
+                        string linkId = "mdLink" + mdLinkCount.ToString();
+                        mdLinkId.Add(lk.Url, linkId);
+                        string linkText = "";
+                        //虽然不是很严谨 不过姑且认为超链接部分都是文字且没有特殊格式
+                        foreach (MarkdownInline mdInline in lk.Inlines)
+                        {
+                            linkText += mdInline.ToString();
+                        }
+                        Hyperlink hyperlink = new Hyperlink() { History = true, Id = linkId };
+                        Run lkrun = new Run();
+                        RunProperties newlkrp = new RunProperties();
+                        Color color = new Color() { Val = "4472C4", ThemeColor = ThemeColorValues.Accent1 };
+                        Underline underline = new Underline() { Val = UnderlineValues.Single };
+                        newlkrp.Append(color);
+                        newlkrp.Append(underline);
+                        lkrun.Append(newlkrp);
+                        lkrun.Append(new Text() { Text = linkText, Space = SpaceProcessingModeValues.Preserve });
+                        hyperlink.Append(lkrun);
+                        paragraph.Append(hyperlink);
                         break;
                     case ImageInline img:
                         ParagraphProperties newpp = (ParagraphProperties)paragraph.ParagraphProperties.Clone();
