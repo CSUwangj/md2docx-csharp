@@ -94,6 +94,7 @@ Opntions:");
             try
             {
                 md = System.IO.File.ReadAllText(mdPath);
+                //生成临时md文件 存储所有的数学公式$$...$$
                 string tmpMdFilePath = Path.Combine(Path.GetTempPath(), tmpFileName + ".md");
                 if (File.Exists(tmpMdFilePath))
                 {
@@ -200,6 +201,7 @@ Opntions:");
                 Console.WriteLine("\nThis warning can also be closed by -q.");
             }
         }
+        //利用pandoc将临时md文件抓换成临时docx文件
         private static void UsePandoc()
         {
             Console.WriteLine("Pandoc Begin!\n");
@@ -221,7 +223,7 @@ Opntions:");
         }
         private static void ProcessingMathExpression(ref Body docBody)
         {
-            //得到数学公式对应的段落
+            //得到临时docx文件的段落(数学公式)
             WordprocessingDocument tmpDocFile = WordprocessingDocument.Open(tmpFileName + ".docx", false);
             List<OpenXmlElement> paragraphs = new List<OpenXmlElement>();
             List<Paragraph> needConvert = new List<Paragraph>();
@@ -233,6 +235,7 @@ Opntions:");
                     paragraphs.Add(paragraph.CloneNode(true));
                 }
             }
+            //根据占位符找到需要进行替换的段落
             foreach (var docBodyChild in docBody.ChildElements)
             {
                 if (docBodyChild is Paragraph paragraph)
@@ -250,6 +253,7 @@ Opntions:");
                         needConvert.Add(paragraph);
                 }
             }
+            //替换
             while (curIdx < paragraphs.Count && curIdx < needConvert.Count)
             {
                 docBody.ReplaceChild<Paragraph>(paragraphs[curIdx], needConvert[curIdx]);
@@ -523,6 +527,10 @@ Opntions:");
             if (block is ParagraphBlock mpara)
             {
                 string str = mpara.ToString();
+                //在此处判断这玩意是不是数学公式
+                //公式放到临时的md文件中 同时在docx的对应位置上放一个占位符tmpFileName 即临时文件的名称
+                //目前仅认为由$$开头且由$$加上任意多个)结束的字符串 是公式
+                //产生$$)这种情况多半是因为上标 比如$$a^b$$ 在此处得到的字符串为$$a^(b$$)
                 if (str.StartsWith("$$") && Regex.IsMatch(str, @"$$$$\)*$"))
                 {
                     RunProperties rp = new RunProperties();
