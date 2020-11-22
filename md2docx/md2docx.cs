@@ -87,7 +87,16 @@ Opntions:");
                 Console.WriteLine("Try`md2docx --help' for more information or use -q stop this message.");
             }
 
-            string md = System.IO.File.ReadAllText(mdPath);
+            string md;
+            try
+            {
+                md = System.IO.File.ReadAllText(mdPath);
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine("Can not find file: " + e.FileName);
+                return;
+            }
             JObject config = JObject.Parse(System.IO.File.ReadAllText(configPath));
             correspondecs = config["对应关系"].ToObject<Dictionary<string, string>>();
             optionalParts = config["可选部分"].ToObject<Dictionary<string, bool>>();
@@ -102,7 +111,16 @@ Opntions:");
                 }
                 if (docPath == "")
                 {
-                    docPath = info["id"] + info["name"] + info["filename"] + ".docx";
+                    try
+                    {
+                        docPath = info["id"] + info["name"] + info["filename"] + ".docx";
+                    }
+                    catch (KeyNotFoundException exception)
+                    {
+                        Console.WriteLine(exception.Message);
+                        Console.WriteLine("Check your Markdown YamlHeader");
+                        return;
+                    }
                 }
             }
 
