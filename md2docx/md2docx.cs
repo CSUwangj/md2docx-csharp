@@ -12,6 +12,8 @@ using Pic = DocumentFormat.OpenXml.Drawing.Pictures;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using NDesk.Options;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace md2docx
 {
@@ -25,7 +27,9 @@ namespace md2docx
         static List<int> failImage = new List<int>();
         static int imageCount = 1;
         static bool hasFailImage = false;
-
+        static int mdLinkCount = 0;
+        static Dictionary<string, string> mdLinkId = new Dictionary<string, string>();
+        static string tmpFileName = "ConvertMathExpression" + new Random().Next().ToString();
         /// <summary>
         /// Print usage without exit
         /// </summary>
@@ -86,7 +90,40 @@ Opntions:");
                 Console.WriteLine("Try`md2docx --help' for more information or use -q stop this message.");
             }
 
-            string md = System.IO.File.ReadAllText(mdPath);
+            string md;
+            try
+            {
+                md = System.IO.File.ReadAllText(mdPath);
+                //生成临时md文件 存储所有的数学公式$$...$$
+                string tmpMdFilePath = Path.Combine(Path.GetTempPath(), tmpFileName + ".md");
+                if (File.Exists(tmpMdFilePath))
+                {
+                    throw new Exception(tmpFileName + ".md" + " already exists.");
+                }
+                File.Create(tmpMdFilePath);
+                FileInfo mdFile = new FileInfo(tmpFileName + ".md");
+                StreamWriter sw = mdFile.AppendText();
+                int curIdx = md.IndexOf("$$");
+                int nxtIdx;
+                while (curIdx != -1)
+                {
+                    nxtIdx = md.IndexOf("$$", curIdx + 2);
+                    if (nxtIdx != -1)
+                    {
+                        sw.WriteLine(md.Substring(curIdx, nxtIdx + 2 - curIdx));
+                        sw.WriteLine();
+                        curIdx = md.IndexOf("$$", nxtIdx + 2);
+                    }
+                    else
+                        break;
+                }
+                sw.Dispose();
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine("Can not find file: " + e.FileName);
+                return;
+            }
             JObject config = JObject.Parse(System.IO.File.ReadAllText(configPath));
             correspondecs = config["对应关系"].ToObject<Dictionary<string, string>>();
             optionalParts = config["可选部分"].ToObject<Dictionary<string, bool>>();
@@ -101,7 +138,16 @@ Opntions:");
                 }
                 if (docPath == "")
                 {
-                    docPath = info["id"] + info["name"] + info["filename"] + ".docx";
+                    try
+                    {
+                        docPath = info["id"] + info["name"] + info["filename"] + ".docx";
+                    }
+                    catch (KeyNotFoundException exception)
+                    {
+                        Console.WriteLine(exception.Message);
+                        Console.WriteLine("Check your Markdown YamlHeader");
+                        return;
+                    }
                 }
             }
 
@@ -138,6 +184,11 @@ Opntions:");
                     ImagePart imagePart = mainPart.AddNewPart<ImagePart>($"image/{imageType[index]}", $"image{index}");
                     imagePart.FeedData(new MemoryStream(imageDatas[index]));
                 }
+                //处理超链接
+                foreach (KeyValuePair<string, string> urlId in mdLinkId)
+                {
+                    mainPart.AddHyperlinkRelationship(new System.Uri(urlId.Key, System.UriKind.Absolute), true, urlId.Value);
+                }
             }
 
             if (hasFailImage && !quiet)
@@ -150,7 +201,66 @@ Opntions:");
                 Console.WriteLine("\nThis warning can also be closed by -q.");
             }
         }
-        
+        //利用pandoc将临时md文件抓换成临时docx文件
+        private static void UsePandoc()
+        {
+            Console.WriteLine("Pandoc Begin!\n");
+            Process p = new Process();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = false;
+            p.Start();
+            p.StandardInput.WriteLine("pandoc " + tmpFileName + ".md " + "-o " + tmpFileName + ".docx &exit");
+            p.StandardInput.AutoFlush = true;
+            Console.WriteLine(p.StandardOutput.ReadToEnd());
+            Console.WriteLine(p.StandardError.ReadToEnd());
+            p.WaitForExit();
+            p.Close();
+            Console.WriteLine("Pandoc end!");
+        }
+        private static void ProcessingMathExpression(ref Body docBody)
+        {
+            //得到临时docx文件的段落(数学公式)
+            WordprocessingDocument tmpDocFile = WordprocessingDocument.Open(tmpFileName + ".docx", false);
+            List<OpenXmlElement> paragraphs = new List<OpenXmlElement>();
+            List<Paragraph> needConvert = new List<Paragraph>();
+            int curIdx = 0;
+            foreach (var child in tmpDocFile.MainDocumentPart.Document.Body.ChildElements)
+            {
+                if (child is Paragraph paragraph)
+                {
+                    paragraphs.Add(paragraph.CloneNode(true));
+                }
+            }
+            //根据占位符找到需要进行替换的段落
+            foreach (var docBodyChild in docBody.ChildElements)
+            {
+                if (docBodyChild is Paragraph paragraph)
+                {
+                    bool isMathExpression = false;
+                    foreach (var paraChild in paragraph.ChildElements)
+                    {
+                        if (paraChild is Run run)
+                        {
+                            if (run.InnerText == tmpFileName)
+                                isMathExpression = true;
+                        }
+                    }
+                    if (isMathExpression)
+                        needConvert.Add(paragraph);
+                }
+            }
+            //替换
+            while (curIdx < paragraphs.Count && curIdx < needConvert.Count)
+            {
+                docBody.ReplaceChild<Paragraph>(paragraphs[curIdx], needConvert[curIdx]);
+                curIdx++;
+            }
+        }
+
         /// <summary>
         /// Generate document body
         /// </summary>
@@ -189,7 +299,9 @@ Opntions:");
             {
                 CovertMarkdownBlock(block, ref docBody);
             }
-            
+            //Pandoc 
+            UsePandoc();
+            ProcessingMathExpression(ref docBody);
             SectionProperties sectionProperties1 = new SectionProperties();
             PageSize pageSize1 = new PageSize() { Width = 11906U, Height = 16838U };
             if (optionalParts["页眉"])
@@ -286,6 +398,28 @@ Opntions:");
                         RunProperties newsprp = (RunProperties)rp.Clone();
                         newsprp.VerticalTextAlignment = new VerticalTextAlignment() { Val = VerticalPositionValues.Superscript };
                         CovertMDInlines(newsprp, sp.Inlines, ref paragraph, ref paragraphs);
+                        break;
+                    case MarkdownLinkInline lk:
+                        ++mdLinkCount;
+                        string linkId = "mdLink" + mdLinkCount.ToString();
+                        mdLinkId.Add(lk.Url, linkId);
+                        string linkText = "";
+                        //虽然不是很严谨 不过姑且认为超链接部分都是文字且没有特殊格式
+                        foreach (MarkdownInline mdInline in lk.Inlines)
+                        {
+                            linkText += mdInline.ToString();
+                        }
+                        Hyperlink hyperlink = new Hyperlink() { History = true, Id = linkId };
+                        Run lkrun = new Run();
+                        RunProperties newlkrp = new RunProperties();
+                        Color color = new Color() { Val = "4472C4", ThemeColor = ThemeColorValues.Accent1 };
+                        Underline underline = new Underline() { Val = UnderlineValues.Single };
+                        newlkrp.Append(color);
+                        newlkrp.Append(underline);
+                        lkrun.Append(newlkrp);
+                        lkrun.Append(new Text() { Text = linkText, Space = SpaceProcessingModeValues.Preserve });
+                        hyperlink.Append(lkrun);
+                        paragraph.Append(hyperlink);
                         break;
                     case ImageInline img:
                         ParagraphProperties newpp = (ParagraphProperties)paragraph.ParagraphProperties.Clone();
@@ -392,19 +526,44 @@ Opntions:");
 
             if (block is ParagraphBlock mpara)
             {
-                Paragraph docPara = new Paragraph
+                string str = mpara.ToString();
+                //在此处判断这玩意是不是数学公式
+                //公式放到临时的md文件中 同时在docx的对应位置上放一个占位符tmpFileName 即临时文件的名称
+                //目前仅认为由$$开头且由$$加上任意多个)结束的字符串 是公式
+                //产生$$)这种情况多半是因为上标 比如$$a^b$$ 在此处得到的字符串为$$a^(b$$)
+                if (str.StartsWith("$$") && Regex.IsMatch(str, @"$$$$\)*$"))
                 {
-                    ParagraphProperties = new ParagraphProperties
+                    RunProperties rp = new RunProperties();
+                    Run run = new Run();
+                    Text text = new Text { Text = tmpFileName, Space = SpaceProcessingModeValues.Preserve };
+                    run.Append(rp);
+                    run.Append(text);
+                    Paragraph paragraph = new Paragraph
                     {
-                        ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
-                    }
-                };
-                List<Paragraph> paragraphs = new List<Paragraph>();
-                CovertMDInlines(new RunProperties(), mpara.Inlines, ref docPara, ref paragraphs);
-                docBody.Append(docPara);
-                foreach (Paragraph paragraph in paragraphs)
-                {
+                        ParagraphProperties = new ParagraphProperties
+                        {
+                            ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
+                        }
+                    };
+                    paragraph.Append(run);
                     docBody.Append(paragraph);
+                }
+                else
+                {
+                    Paragraph docPara = new Paragraph
+                    {
+                        ParagraphProperties = new ParagraphProperties
+                        {
+                            ParagraphStyleId = new ParagraphStyleId { Val = correspondecs["正文"] }
+                        }
+                    };
+                    List<Paragraph> paragraphs = new List<Paragraph>();
+                    CovertMDInlines(new RunProperties(), mpara.Inlines, ref docPara, ref paragraphs);
+                    docBody.Append(docPara);
+                    foreach (Paragraph paragraph in paragraphs)
+                    {
+                        docBody.Append(paragraph);
+                    }
                 }
             }
             else if (block is CodeBlock mcode)
