@@ -14,6 +14,8 @@
 
 请注意图片路径的问题。
 
+数学公式目前仅支持对一整个段落的处理，即以$$开头且结尾的段落被当作数学公式。处理过程借助了[Pandoc](https://github.com/jgm/pandoc/releases/tag/2.11.1.1)，所以你需要安装Pandoc，并将其程序路径加入PATH。
+
 ## 编译
 
 ### Visual Studio
@@ -50,9 +52,10 @@ schema文件为[schema](./docs/schema.json)，示例文件为[default config](./
 - [x] 图片
 - [x] 页眉
 - [x] 页脚
+- [x] 链接
+- [x] 公式
 - [ ] 将parser更换成一个标准更接近GFM的parser
 - [ ] 根据文件设定路径
 - [ ] 表格
 - [ ] 列表
-- [ ] 公式
 - [ ] 图形化
