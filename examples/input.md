@@ -18,11 +18,27 @@ c_kew: 这里　是　中文　关键词　用　全角　空格　分隔
 
 1***23^2~13~12^3312^5~1~2~~3***51^2~~5321*12~~==3^1**2^==~~3*12~~3**12~~3
 
+$$\Delta=b^2-4ac$$
+
 ***<sub>123123</sub> <sup>123213</sup>***
+
+$$x_1=\frac{-b+\sqrt{b^2-4ac}}{2a}$$
 
 ***`this is code example`***
 
 **`another code`**
+
+$$a=b^{c^{d^{e}}}$$
+
+$$a=\frac12$$
+
+$$a=\sqrt[3]{x+y}$$
+
+$$\frac{\partial x}{\partial y}$$
+
+$$
+A= \left\{ \begin{matrix} a & b & \cdots & e\\ f & g & \cdots & j \\ \vdots & \vdots & \ddots & \vdots \\ p & q & \cdots & t \end{matrix} \right\}
+$$
 
 #第1章　哈哈哈哈哈哈哈
 
@@ -30,7 +46,23 @@ c_kew: 这里　是　中文　关键词　用　全角　空格　分隔
 
 ###1.1.1　啦啦啦啦啦
 
+$$\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$$
+
+$$
+\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
+$$
+
 测试测试测试
+
+$$a=\sum_{i=0}^nb_i$$
+
+$$a=\prod_{i=0}^n\prod_{j=0}^mb_i\times c_j$$
+
+$${n+1 \choose k}={n \choose k}+{n \choose k-1}$$
+
+$$x \cdot y=z$$
+
+$$x \ast y=z$$
 
 #结束语
 
