@@ -2,7 +2,7 @@
 
 使用C#开发的将markdown转换为docx的工具。
 
-该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前2.1版已经完工，下一步动向见TODO。
+该项目是[CSUIS-md2docx](https://github.com/CSUwangj/CSUIS-md2docx)的一个子项目，目前2.3版已经完工，下一步动向见TODO。
 
 下载: [latest release](https://github.com/CSUwangj/md2docx-csharp/releases) | [latest CI build (master)](https://ci.appveyor.com/api/projects/CSUwangj/md2docx-csharp/artifacts/md2docx/bin/md2docx.zip)(文档未完成)
 
@@ -14,7 +14,7 @@
 
 请注意图片路径的问题。
 
-数学公式目前仅支持对一整个段落的处理，即以$$开头且结尾的段落被当作数学公式。处理过程借助了[Pandoc](https://github.com/jgm/pandoc/releases/tag/2.11.1.1)，所以你需要安装Pandoc，并将其程序路径加入PATH。
+数学公式目前仅支持对一整个段落的处理，即以`$$`开头且结尾的段落被当作数学公式。处理过程借助了[Pandoc](https://github.com/jgm/pandoc/releases/tag/2.11.1.1)，所以你需要安装Pandoc，并将其程序路径加入PATH。
 
 ## 编译
 
@@ -40,7 +40,7 @@ schema文件为[schema](./docs/schema.json)，示例文件为[default config](./
 
 ## 文档
 
-在我的[博客](https://csuwangj.github.io/%E7%BC%96%E7%A8%8B%E6%98%AF%E5%BE%88%E5%A5%BD%E7%8E%A9%E7%9A%84-md2docx%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%87%BA%E6%9D%A5%E7%9A%84/)中对写这个程序的过程做了一个简介，同时总结了一下用到的资料，暂且先用它吧。
+在我的[博客](https://csuwangj.github.io/bian-cheng-shi-hen-hao-wan-de-md2docxshi-zen-yao-xie-chu-lai-de/)中对写这个程序的过程做了一个简介，同时总结了一下用到的资料，暂且先用它吧。
 
 ## TODO
 
